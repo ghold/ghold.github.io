@@ -1,6 +1,8 @@
 ---
 layout: default
 title: 评论显示方式改进
+category: TECHNIQUE
+tags: JQUERY
 ---
 
 之前的版本其实是当鼠标移进（mouseenter）文章时，评论瞬间转变为该文章的评论，自己感觉会略显突然，用户体验也不好。再低调点的做法，当然是稍加隐藏啦。
