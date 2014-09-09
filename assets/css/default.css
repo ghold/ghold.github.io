@@ -1,0 +1,38 @@
+#content {
+	margin-top: 2em;
+}
+
+#main {
+	width: 80%;
+	display: block;
+	float: left;
+}
+
+#side {
+	width: 20%;
+	display:block;
+	float: left;
+}
+
+#side li {
+	list-style: none;
+}
+
+.date_side {
+	width: 10%;
+	display:block;
+	float: left;
+}
+
+.content_side {
+	float: left;
+	display:block;
+	width: 90%
+}
+
+code {
+	white-space: pre;
+	word-break: normal;
+	word-wrap: normal;
+}
+

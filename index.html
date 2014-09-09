@@ -2,9 +2,15 @@
 layout: index
 title: Ghold Learn more, Do more
 ---
-<p>最新文章</p>
-<ul>
+
 {% for post in site.posts %}
-	<li>{{ post.date | date_to_string }} <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></li>
+<div class = "date_side">
+	<h3>{{ post.date | date: "%b %d<br >%Y"}}</h3>
+</div>
+<div class = "content_side">
+<h3><a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></h3>
+<p>{{ post.category| upcase}} | {{ post.tags | join: ', '}}
+{{ post.content }}
+</div>
+
 {% endfor %}
-</ul>
