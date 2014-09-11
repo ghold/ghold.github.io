@@ -16,6 +16,8 @@ tags: D3 NODEJS
 
 很明显，前三个圆出问题了。原因是教程中的[circleEnter](http://bost.ocks.org/mike/circles/#entering)对象并没有包含原始的三个circle。我在这并不分析为什么没有包含，想借此介绍发现问题的经验。
 
+<!-- excerpt -->
+
 开始时笔者并没有使用任何debug的工具，笨笨地使用console.log打印对象，验证问题。开发工具是Sublime Text 2，就这样一行一行的敲。刚开始发现问题的时候，我通过
 
 `console.log(circleEnter)`

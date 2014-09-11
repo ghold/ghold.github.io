@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+　　<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<link rel="stylesheet" href="/assets/css/metro-bootstrap.css" />
+    <link rel="stylesheet" href="/assets/css/default.css" />
+    <script src="/assets/js/metro/metro.min.js"></script>
+    <script src="/assets/js/func.js"></script>
+　　<title>Ghold Learn more, Do less</title>
+</head>
+<body class="metro">
+	<nav class="navigation-bar dark fixed-top">
+        <nav class="navigation-bar-content">
+			<div class="element top_title"><a href="/">
+                Ghold Learn more, Do Less</a></div>
+			{% for cate in site.categories %}
+                <div class="element">
+                	<a href="/map.html#{{ cate | first | upcase }}">{{ cate | first | upcase}}</a>
+                </div>
+            {% endfor %}
+            </nav>
+		</nav>

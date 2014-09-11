@@ -1,0 +1,28 @@
+---
+layout: index
+title: Ghold Learn more, Do less
+---
+{% for cate in site.categories %}
+<div class = "date_side map_date_side">
+	<h3 id="{{ cate | first | upcase }}">{{ cate | first | upcase }}</h3>
+</div>
+<div class = "content_side map">
+	{% for post in site.categories[cate.first] %}
+	<div>
+		<h4>{{ post.date | date: "%F" }} <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></h4>
+	</div>
+	{% endfor %}
+</div>
+{% endfor %}
+{% for tag in site.tags %}
+<div class = "date_side map_date_side">
+	<h3 id="{{ tag | first | upcase }}">{{ tag | first | upcase }}</h3>
+</div>
+<div class = "content_side map">
+	{% for post in site.tags[tag.first] %}
+	<div>
+		<h4>{{ post.date | date: "%F" }} <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></h4>
+	</div>
+	{% endfor %}
+</div>
+{% endfor %}

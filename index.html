@@ -1,6 +1,6 @@
 ---
 layout: index
-title: Ghold Learn more, Do more
+title: Ghold Learn more, Do less
 ---
 
 {% for post in site.posts %}
@@ -8,9 +8,10 @@ title: Ghold Learn more, Do more
 	<h3>{{ post.date | date: "%b %d<br >%Y"}}</h3>
 </div>
 <div class = "content_side">
-<h3><a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></h3>
-<p>{{ post.category| upcase}} | {{ post.tags | join: ', '}}
-{{ post.content }}
+	<h3><a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></h3>
+	<p>{{ post.category| upcase}} | {{ post.tags | join: ', '}}</p>
+	{{ post.excerpt | markdownify }}
+	<p><a href="{{ site.baseurl }}{{ post.url }}">查看全文..</a></p>
 </div>
 
 {% endfor %}

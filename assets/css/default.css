@@ -1,5 +1,5 @@
 #content {
-	margin-top: 2em;
+	margin-top: 45px;
 }
 
 #main {
@@ -22,6 +22,8 @@
 	width: 10%;
 	display:block;
 	float: left;
+	text-align: right;
+	padding-right: 5px;
 }
 
 .content_side {
@@ -36,3 +38,19 @@ code {
 	word-wrap: normal;
 }
 
+.top_title a{
+	color: #fff;
+}
+
+div.content_side {
+	padding-bottom: 10px;
+}
+
+div.map {
+	padding-top: 30px;
+}
+
+div.map_date_side{
+	text-align: left;
+	padding-left: 10px; 
+}

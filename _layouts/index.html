@@ -1,36 +1,15 @@
-<!DOCTYPE html>
-<html>
-<head>
-　　<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-	<link rel="stylesheet" href="/assets/css/metro-bootstrap.css" />
-    <link rel="stylesheet" href="/assets/css/default.css" />
-    <script src="/assets/js/metro/metro.min.js"></script>
-　　<title>Ghold Learn more, Do more</title>
-</head>
-<body class="metro">
-	<nav class="navigation-bar dark fixed-top">
-        <nav class="navigation-bar-content">
-			<div class="element">Ghold Learn more, Do more</div>
-			{% for cate in site.categories %}
-                <div class="element">
-                	<a href="{{ site.baseurl }}category.html?c={{ cate | first }}">{{ cate | first | upcase}}</a>
-                </div>
-            {% endfor %}
-            </nav>
-		</nav>
+{% include header.html %}
     <div id="content">
         <div id= "main">
             {{ content }}
         </div>
         <div id= "side">
             <ul>
-{% for post in site.posts %}
-    <li><a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></li>
-{% endfor %}
-            
+            {% for post in site.posts %}
+                <li><a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></li>
+            {% endfor %}
+            </ul>
         </div>
-	
     </div>
-</ul>
 </body>
 </html>
