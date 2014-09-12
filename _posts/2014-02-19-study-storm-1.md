@@ -9,6 +9,7 @@ tags: STROM
 >感谢官方wiki提供的[原文](https://github.com/nathanmarz/storm/wiki/Concepts)
 
 ###一些概念
+
 ####计算拓扑：Topologies
 1.  Topology对象里包含实时计算程序
 2.  一个Storm的Topology会一直运行——除非显式杀死
@@ -18,6 +19,8 @@ tags: STROM
 1.  [TopologyBuilder](http://nathanmarz.github.io/storm/doc/index.html)：使用这个类在Java中构造计算拓扑
 2.  [在生产集群上运行计算拓扑](https://github.com/nathanmarz/storm/wiki/Running-topologies-on-a-production-cluster)
 3.  [本地模式](https://github.com/nathanmarz/storm/wiki/Local-mode)：通过这篇文章学习如何在本地模式开发和测试计算拓扑
+
+<!-- excerpt -->
 
 ####信息流：Streams
 1.  一个信息流是一个没有边界的tuple（数据元组）序列，而这些tuples会被以一种分布式的方式并行地创建和处理

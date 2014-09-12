@@ -6,7 +6,12 @@
 			</div>
 			<div class = "content_side">
 				<h3>{{ page.title }}</h3>
-				<p>{{ page.category| upcase}} | {{ page.tags | join: ', '}}</p>
+				<p><a href="/map.html#{{ page.category| upcase }}">{{ page.category| upcase}}</a> | 
+				{% for tag in page.tags %}
+					<a href="/map.html#{{ tag| upcase }}">{{ tag| upcase }}</a>{% unless page.tags.last == tag %}, {% endunless %}
+
+				{% endfor %}
+				</p>
 				{{ content }}
 			</div>
         </div>

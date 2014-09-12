@@ -1,5 +1,12 @@
-#content {
-	margin-top: 45px;
+
+header {
+	height: 45px;
+	position: relative;
+}
+
+#content{
+	margin: 0 auto;
+	height: inherit;
 }
 
 #main {

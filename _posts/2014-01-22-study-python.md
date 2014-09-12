@@ -6,6 +6,7 @@ tags: PYTHON
 ---
 
 一篇之前学习Python的笔记，感谢《笨办法学Python》的作者。本文是结合《笨办法学Python》和Python3.3的一些补充。
+
 ####Ex01
 1.  `print`后要加括号（python3.3）
 
@@ -17,6 +18,8 @@ tags: PYTHON
 
 ####Ex04
 1.  `print`参数连接打印时，自动插入空格
+
+<!-- excerpt -->
 
 ####Ex05
 1.  `print`中多个参数格式化时，参数以元组形式传入
@@ -340,18 +343,29 @@ tags: PYTHON
      *  Python标准库没有提供函数注释，因为怕形成一种过早的约定和特定的注解样式。建议自行发掘适合自身的注解方式
 
 ####Ex46
-项目框架
->projects\
->>proj_hello\（项目名）
->>>setup.py（安装文件）
-NAME\（任意命名）
->>>>__init__.py
 
->>>bin\
-docs\
-tests\
->>>>NAME_test.py
-__init__.py
+项目框架
+
+
+> `projects\`  
+>
+> > `proj_hello\（项目名）`
+> >
+> > > `setup.py（安装文件）`
+> > >
+> > > `NAME\（任意命名）`
+> > >
+> > > > `__init__.py`
+> > >
+> > > `bin\`  
+> > > `docs\`  
+> > > `tests\`
+> > >
+> > > > `NAME_test.py`  
+> > > > `__init__.py`
+
+
+
 
 对项目执行测试要在项目名下级执行nosetests
 
