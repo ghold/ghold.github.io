@@ -10,11 +10,13 @@ tags: NODEJS
 包含服务、路由初始化，路由映射等
 
 ---
+
 ####**http服务（server.js）**
 
 建立http服务，按照路由映射发送请求
 
 ---
+
 ####**路由（route.js）**
 
 按照请求内容分配
@@ -22,6 +24,8 @@ tags: NODEJS
 <!-- excerpt -->
 
 ---
+
+
 ####**请求处理（requestHandlers.js）**
 
 实现查询逻辑
@@ -29,6 +33,8 @@ tags: NODEJS
 *	`show*`：`show*`的作用是建立请求的页面，包含请求使用的form元素，加上外部的ajax调用，实现工具数据输入
 *	`query*`或`get*`：`query*`或`get*`的作用是对查询服务器进行请求并接收返回值。调用`query*`或`get*`的方法只能通过`show*`中ajax调用
 *	`static`：静态文件下载请求使用
+
+---
 
 ####**生成器（generator.js）**
 
@@ -45,6 +51,7 @@ tags: NODEJS
 *	nofield：无字段形式，内容只有一个值的情况
 
 ---
+
 ####**过滤器（filter.js）**
 过滤器用于增强生成器的解析能力，通过生成器与过滤器递归调用使用。
 
@@ -57,6 +64,7 @@ tags: NODEJS
 *	`html_warp`：对过长的字符串列表按逗号进行截取，分行显示
 
 ---
+
 ####**配置文件（config/default.json）**
 
 default.json记录了工具展示数据的结构，可以实现增量扩展。
