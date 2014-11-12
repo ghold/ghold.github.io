@@ -50,7 +50,7 @@ tags: D3 NODEJS
  1. 把Chrome设成默认浏览器
  2. 保存nodejs脚本`<script.js>`
  3. 打开shell（或cmd），到脚本目录
- 4. 执行`node -debug <script.js>`
+ 4. 执行`node-debug <script.js>`
 
 就这样，nodejs会启动一个debug服务器，并使用Chrome开发工具进行断点、对象查看等debug功能。
 
