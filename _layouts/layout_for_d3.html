@@ -1,0 +1,27 @@
+{% include header_for_d3.html %}
+    <div id="content">
+        <div id= "main">
+        	<div class = "date_side">
+				<h3>{{ page.date | date: "%b %d<br >%Y"}}</h3>
+			</div>
+			<div class = "content_side">
+				<h3>{{ page.title }}</h3>
+				<p><a href="/map.html#{{ page.category| upcase }}">{{ page.category| upcase}}</a> | 
+				{% for tag in page.tags %}
+					<a href="/map.html#{{ tag| upcase }}">{{ tag| upcase }}</a>{% unless page.tags.last == tag %}, {% endunless %}
+
+				{% endfor %}
+				</p>
+				{{ content }}
+			</div>
+        </div>
+        <div id= "side">
+            <ul>
+			{% for post in site.posts %}
+			    <li><a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></li>
+			{% endfor %}
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
