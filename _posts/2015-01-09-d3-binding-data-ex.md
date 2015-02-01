@@ -75,6 +75,8 @@ selection.data会执行update处理，update的结果会绑定到元素上，匹
 
 例子根据索引进行绑定的原理。
 
+<link rel="stylesheet" href="/assets/css/d3_data_binding/default.css">
+
 <example1></example1>
 
 1. 初次化都是新增。

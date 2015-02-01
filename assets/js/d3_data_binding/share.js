@@ -1,3 +1,7 @@
+//From http://bl.ocks.org/mbostock/3808218
+//http://bl.ocks.org/mbostock/3808221
+//http://bl.ocks.org/mbostock/3808234
+//Thanks for sharing
 var alphabet = "abcdefghijklmnopqrstuvwxyz".split("");
 
 var width = 960,
