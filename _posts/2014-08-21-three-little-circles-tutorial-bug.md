@@ -5,6 +5,7 @@ category:  STUDY
 tags: D3 NODEJS
 ---
 >笔者最近对开源数据图形化库d3产生兴趣，开始学习相关教程。
+>教程来自[Three Little Circles](http://bost.ocks.org/mike/circles/)，感谢
 
 就原因来说，可能是由于[新版本的d3](https://github.com/mbostock/d3)与[教程](http://bost.ocks.org/mike/circles)不同步导致的。首先我们来看结果，按照教程出来的结果是：
 

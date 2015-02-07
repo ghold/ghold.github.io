@@ -10,7 +10,13 @@ header {
 }
 
 #main {
-	width: 80%;
+	width: 60%;
+	display: block;
+	float: left;
+}
+
+#space {
+	width: 20%;
 	display: block;
 	float: left;
 }
@@ -26,7 +32,7 @@ header {
 }
 
 .date_side {
-	width: 10%;
+	width: 15%;
 	display:block;
 	float: left;
 	text-align: right;
@@ -36,7 +42,7 @@ header {
 .content_side {
 	float: left;
 	display:block;
-	width: 90%
+	width: 85%
 }
 
 code {
