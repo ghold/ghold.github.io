@@ -17,7 +17,7 @@ tags: D3
 
 <p id="menu"><b>Top States by Age Bracket, 2008</b><br>Age: <select></select></p>
 
-<script ype="text/javascript" src="/assets/js/d3_object_constancy/share.js" ></script>
+<script type="text/javascript" src="/assets/js/d3_object_constancy/share.js" ></script>
 
 以下介绍这个例子中有趣的知识点：
 
