@@ -5,7 +5,7 @@ category: TECHNIQUE
 tags: THRIFT JAVA NODEJS JAVASCRIPT
 ---
 
-我在一年前开始使用Thrift，契机是当时要开发一个后台内部数据查看工具。公司内部大多数系统都是使用Java作为主要语言，而我在毕业设计是对Java产生了厌恶，决心在未来应该尽可能远离Java开发（可惜事与愿违，现在已经成为职业Java开发）。那时我还是一个爱写小程序的测试工程师，比较偏向类似于Python、Javascript等等的“小语种”，这时被我遇到了Thrift。
+我在一年前开始使用Thrift，契机是当时要开发一个后台内部数据查看工具。公司内部大多数系统都是使用Java作为主要语言，而我在毕业设计是对Java产生了厌恶，决心在未来应该尽可能远离Java开发（可惜事与愿违，现在已经成为职业Java开发）。那时我还是一个爱写小程序的测试工程师，比较偏向类似于Python、Javascript等等的“小语种”，这时，我遇到了Thrift。
 
 <!-- excerpt -->
 
@@ -13,15 +13,15 @@ tags: THRIFT JAVA NODEJS JAVASCRIPT
 
 >The Apache Thrift software framework, for scalable cross-language services development, combines a software stack with a code generation engine to build services that work efficiently and seamlessly between C++, Java, Python, PHP, Ruby, Erlang, Perl, Haskell, C#, Cocoa, JavaScript, Node.js, Smalltalk, OCaml and Delphi and other languages.
 
-Thrift有两点适合我：一是，我比较懒，既然有生成器生成服务代码，太符合懒人特点；二是，跨语言交互，能支持10多种语言进行通信，那么很多有趣的事情都可以简单做到。尤其是跨语言交互，利用服务化的接口建立不同语言间的服务端和客户端，只需要简单地实现接口，即可实现各种语言间的通讯。
+经过学习发现，Thrift有两点适合我：一是，Thrift提供了生成器，可以简单生成接口服务代码，很适合懒人使用；二是，跨语言交互，能支持10多种语言进行通信，很多有趣的事情都可以简单做到。尤其是跨语言交互，利用服务化的接口建立不同语言间的服务端和客户端，只需要简单地实现接口，即可实现各种语言间的通讯。
 
 ---
 
 ###Java与nodejs
 
-工具是用来解决问题的，选择合适的工具可以增添解决问题的趣味性。一般来说，对于做一个接口查询Java后台的数据，有以下两种传统的方法：对内使用struts＋Jsp的方式，对外使用webservice方式。前者使用一大堆action和占位符模版——累，后者使用冗长的xml作为通讯协议——烦。Thrift则给了我一个简单的解决方案。
+工具是用来解决问题的，我认为选择合适的工具可以增添解决问题的趣味性。传统上，做一个接口查询Java后台的数据，有以下两种方法：对内使用struts＋Jsp的方式，对外使用webservice方式。前者使用一大堆action和占位符模版——一个字，累；后者使用冗长的xml作为通讯协议——两个字，乏味。Thrift则给了我一个简单有趣的解决方案。
 
-先看以下的代码：
+先看以下的文本：
 
 ```
 # hello.thrift
@@ -30,7 +30,7 @@ service HelloService {
 }
 ```
 
-以上就是Thrift框架的原型接口，是不是很简单明了？不过还需要进行加工，这时我们可以选择自己喜欢的语言：首先是服务端是Java无疑，毕竟是用Java写的后台；其次我选择了nodejs，因为当时在学习nodejs，进行点实践还是要的。
+以上就是Thrift框架的原型接口文本，乍看这三行玩意不是能用的范。不过还需要进行加工，这时我们可以选择自己喜欢的语言：首先是服务端是Java无疑，毕竟是用Java写的后台；其次我选择了nodejs，因为当时在学习nodejs，进行点实践还是要的。
 
 在Windows下，我们需要使用官方的thrift.exe对原型接口进行转化生成。在cmd中执行
 
@@ -39,7 +39,7 @@ thrift.exe -r --gen java hello.thrift
 thrift.exe -r --gen js:node hello.thrift
 ```
 
-会分别产生两种语言的接口服务，均可以应用在建立服务端和客户端上。
+，在Mac中则是去掉.exe(前提是已经安装了Thrift，请自行官网找安装教程)，会分别产生两种语言的接口服务，均可以用来建立各自语言服务端和客户端。
 
 ####选择Java服务模型
 
