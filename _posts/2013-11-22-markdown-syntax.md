@@ -17,6 +17,8 @@ _italic_   __bold__ :
 ```
 _italic_   __bold__
 
+<!-- excerpt -->
+
 ***
 
 **链接（标题选填）**
@@ -39,8 +41,6 @@ _italic_   __bold__
 [例子][1]
 
 [1]: http://ghold.net/  "ghold.net"
-
-<!-- excerpt -->
 
 ***
 
