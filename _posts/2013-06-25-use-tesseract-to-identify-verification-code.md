@@ -14,6 +14,7 @@ tags: PYTHON TESSERACT
 最近半年在接触python，一直使用eric，挺不错。当然不是很精通eric，譬如还不会debug功能怎么用。本次开发使用了流行的开源光学识别库tesseract，本人能力有限，不讨论底层的东西，只说说我对它的使用。Pyocr是连接python和tesseract的桥梁，其实有更好的python-tesseract项目，待会讲到pyocr时再说理由。
 
 <!-- excerpt -->
+---
 
 ###今天的主角：
 
@@ -28,70 +29,90 @@ tags: PYTHON TESSERACT
  - 图片大小。原图只有96×30大小，在之后训练traineddata时比较恶心，建议尽量放大点（这里放大了5倍）
  - 保存质量。开始时不懂这个属性，导致保存的图会出现灰色的斑点，影响识别质量。后来在google上查找“PIL如何保存高质量图”时找到了答案：
 
-`im.save(mImgFile, 'JPEG', quality = 100)`
+```python
+im.save(mImgFile, 'JPEG', quality = 100)
+```
 	
 使用tesseract自带的eng. Traineddata进行识别时会出现不同程度错判，譬如会出现特殊符号、无法判断出结果。先来解决第一个问题。根据我拿到的验证码规律，是由数字和小写英文字母组成，所以我觉得自行训练一个traineddata。Traineddata是提供给tesseract进行光学识别使用的，自行训练的traineddata可提高特定类似字体的识别准确率。
 
+---
+
 开始时我参考这篇文章进行操作，对快速入门非常有用。下面简述我的过程：
 
-####选取训练集和测试集
+1. 选取训练集和测试集
+	
+	由于要识别的主角比较简单，我大概选择了50个图片，分4批：6、12、24、8，其中8时测试集
 
-由于要识别的主角比较简单，我大概选择了50个图片，分4批：6、12、24、8，其中8时测试集
+2. 生成训练集box
+	
+	开始时我跟着参考文章走，结果发现一个现象，有些图片无论如何都无法产生box，或是如果自行添加box，在训练时也会报错。这个问题我一直以为是tesseract的主观意识（就是bug了）。我把这些图片列为Bad Imgs。
 
-####生成训练集box
+	直至看到一篇文章上提到了一下关于tesseract3的一个特性参数psm。如果安装了tesseract3，可以在cmd或者shell中输入tesseract查看。这个特性有11个参数，我没有根究默认是什么参数，反正如果时一列字符串建议选择7。
 
-开始时我跟着参考文章走，结果发现一个现象，有些图片无论如何都无法产生box，或是如果自行添加box，在训练时也会报错。这个问题我一直以为是tesseract的主观意识（就是bug了）。我把这些图片列为Bad Imgs。
+	```PowerShell
+	tesseract eng.ver.001.jpg eng.ver.001 -l eng –psm 7 batch.nochop makebox
+	```
 
-直至看到一篇文章上提到了一下关于tesseract3的一个特性参数psm。如果安装了tesseract3，可以在cmd或者shell中输入tesseract查看。这个特性有11个参数，我没有根究默认是什么参数，反正如果时一列字符串建议选择7。
+	如果后期生成了test. Traineddata，也可以使用
 
-`tesseract eng.ver.001.jpg eng.ver.001 -l eng –psm 7 batch.nochop makebox `
+	```PowerShell
+	tesseract eng.ver.001.jpg eng.ver.001 -l eng –psm 7 batch.nochop makebox
+	```
 
-如果后期生成了test. Traineddata，也可以使用
+	为了懒惰，自己已经写成py文件了
 
-`tesseract eng.ver.001.jpg eng.ver.001 -l eng –psm 7 batch.nochop makebox`
+3. 修改box
 
-为了懒惰，自己已经写成py文件了
+	体力活，开始时没有放大图片，修改时简直可以让视力降低几百度。使用cowboxer打开box文件，调整框框的大小和对应的字符。具体查看cowboxer的帮助
 
-####修改box
+4.	训练box，产生tr文件
 
-体力活，开始时没有放大图片，修改时简直可以让视力降低几百度。使用cowboxer打开box文件，调整框框的大小和对应的字符。具体查看cowboxer的帮助
+	```PowerShell
+	tesseract eng.ver.001.jpg eng.ver.001 –psm 7 nobatch box.train
+	```
 
-####训练box，产生tr文件
+	每个box执行一次。注意，这里也要加上psm参数，不然可能会报错。
 
-`tesseract eng.ver.001.jpg eng.ver.001 –psm 7 nobatch box.train`
+5. 产生字符集
 
-每个box执行一次。注意，这里也要加上psm参数，不然可能会报错。
+	```PowerShell
+	unicharset_extractor eng.ver.001.tr eng.ver.002.tr eng.ver.003.tr
+	```
 
-####产生字符集
+	让tesseract知道可以识别什么字符  
 
-`unicharset_extractor eng.ver.001.tr eng.ver.002.tr eng.ver.003.tr` 
+6. 生成inttemp（图像原型）、shapetable和pffmtable（字符出现次数）文件
 
-让tesseract知道可以识别什么字符  
+	```PowerShell
+	mftraining -U unicharset -O test.unicharset eng.ver.001.tr eng.ver.002.tr eng.ver.003.tr
+	```
 
-####生成inttemp（图像原型）、shapetable和pffmtable（字符出现次数）文件
+	输出几个生成训练集必须的文件
 
-`mftraining -U unicharset -O test.unicharset eng.ver.001.tr eng.ver.002.tr eng.ver.003.tr`
+	**这步遇到了一个问题，参看文章（已丢失），但这篇文章是直接摘抄googlecode里的描述翻译了一下，没有给出解决办法。以下是笔者的解决方法：**
 
-输出几个生成训练集必须的文件
+    1. 需要一个合适的命名。Tesseract的文档中强调了图像的命名格式——[lang].[fontname].exp[num].tif，并不是毫无意义的，其中fontname字段的存在最为重要。验证方式在第4步的执行中输出font为ver
 
-**这步遇到了一个问题，参看文章（已丢失），但这篇文章是直接摘抄googlecode里的描述翻译了一下，没有给出解决办法。以下是笔者的解决方法：**
+    2. 需要一个font_properties文件。开始时由于命名问题，一直不知道网上说这个文件要配置的Font是啥。其实就是简单的把ver 0 0 0 0 0和回车加上，保存为无-BOM UTF-8 UNIX换行符即可。
+    
 
- - 需要一个合适的命名。Tesseract的文档中强调了图像的命名格式——[lang].[fontname].exp[num].tif，并不是毫无意义的，其中fontname字段的存在最为重要。验证方式在第4步的执行中输出font为ver
- - 需要一个font_properties文件。开始时由于命名问题，一直不知道网上说这个文件要配置的Font是啥。其实就是简单的把ver 0 0 0 0 0和回车加上，保存为无-BOM UTF-8 UNIX换行符即可。
+7. 生成normproto文件（具体也不清楚干啥的）
 
-####生成normproto文件（具体也不清楚干啥的）
+	```PowerShell
+	cntraining eng.ver.001.tr eng.ver.002.tr eng.ver.003.tr
+	```
 
-`cntraining eng.ver.001.tr eng.ver.002.tr eng.ver.003.tr`
+8. 把6、7出现的文件的文件名改成test.前缀，见参考文章
 
-####把6、7出现的文件的文件名改成test.前缀，见参考文章
+9. 合成test. traineddata
 
-####合成test. traineddata
+	```PowerShell
+	combine_tessdata test. 
+	```
 
-`combine_tessdata test. `
+	还是为了懒惰，4-9步已合成一个py
 
-还是为了懒惰，4-9步已合成一个py
-
-####循环移上步骤不断修正test.traineddata
+10. 循环移上步骤不断修正test.traineddata
 
 最后，主角回归，使用pycor对测试集进行识别。选择pycor的一个重要原因是，pycor和python-tesseract都不支持python3.3。我尝试过对python-tesseract的源码进行编译python3.3的版本，可惜水平不够，只能失败告终。而pycor源码比较简单，只是判断识别码的话足够了，而且对python3.3的兼容性优化几步搞掂。在这个小项目期间还发现了pycor不支持psm参数，自行添加上了。
 

@@ -9,11 +9,15 @@ tags: D3
 
 D3使用selection.transition可以在改变DOM时简单实现动画的效果。举个简单的例子，实现一个改变页面字体颜色的代码为：
 
-`d3.select("body").style("color", "red");`
+```javascript
+d3.select("body").style("color", "red");
+```
 
 如果加上变换及变化的时长，一个简单的字体变颜色的动画就有了（默认为黑色）：
 
-`d3.select("body").transition().duration(2000).style("color", "red");`
+```javascript
+d3.select("body").transition().duration(2000).style("color", "red");
+```
 
 以下开始了解转变的细节。
 
@@ -29,16 +33,16 @@ D3使用selection.transition可以在改变DOM时简单实现动画的效果。�
 
 这个时候，我们可以自定义起点关键帧的状态。方法一是在创建转变器前定义起点关键帧：
 
-```
+```javascript
 d3.select("body")
     .style("color", "green")
-  .transition()
+    .transition()
     .style("color", "red");
 ```
 
 不过这种方法只是保持属性值是一致的，并没有解决属性值转换的问题。方法二是提供起点状态和终点状态，同时提供一个指定的内插器，保证转换也是一致的：
 
-```
+```javascript
 d3.select("body")
 	.transition()
     .styleTween("color", function() { 
@@ -65,7 +69,7 @@ transition.styleTween可以自定义一个样式内插器，这个内插器会�
 
 现在回到标题中“随时间“理解。实际上，当我们需要自定义插值器时，被定义的插值器要返回一个以时间t为参数，定义域为[0, 1]的子处理器。这样的一个插值器，当t为0时，返回的是起点状态的值；当t为1时，返回的是终点状态的值；当0<t<1时，返回一个混合值（其实我觉得只要任意定义域里的t，函数都有返回值应该就可以了）
 
-```
+```javascript
 function interpolateNumber(a, b) {
   return function(t) {
     return a + t * (b - a);
@@ -83,22 +87,22 @@ function interpolateNumber(a, b) {
 
 以下代码会经常用到
 
-```
+```javascript
 //绑定数据
 var bar = svg.selectAll(".bar")
     .data(data, function(d) { return d.key; });
-//
+
 //给enter选择器的元素进行初始化
 bar.enter().append("rect")
     .attr("class", "bar")
-//  …
-//
+    //…
+
 //对enter和update选择器的元素设计转变器
 bar.transition()
-//
+
 //对exit选择器设计退出的转变器，最后要删除元素
 bar.exit().transition()
-//  …
+    //…
     .remove();
 ```
 

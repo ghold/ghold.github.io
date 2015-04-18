@@ -107,7 +107,9 @@ selection.data会执行update处理，update的结果会绑定到元素上，匹
 
 在绑定时使用了
 
-`.data(data, function(d) {return d})`
+```javascript
+.data(data, function(d) {return d})
+```
 
 这句会在选择器的每个元素都跑一次，也会在data数组中每个索引跑一次。两者产生的结果相同的话，就会绑定在一起。
 

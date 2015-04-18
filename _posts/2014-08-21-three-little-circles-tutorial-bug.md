@@ -21,13 +21,15 @@ tags: D3 NODEJS
 
 开始时笔者并没有使用任何debug的工具，笨笨地使用console.log打印对象，验证问题。开发工具是Sublime Text 2，就这样一行一行的敲。刚开始发现问题的时候，我通过
 
-`console.log(circleEnter)`
+```javascript
+console.log(circleEnter);
+```
 
 打印出circleEnter对象后发现对象内有个数组前3个为null，想必问题出在这，导致后续的回调函数无法应用到前三个圆上。
 
 但是知识浅薄的笔者并没有发现问题的关键，进而把问题认定为*d3不兼容nodejs*。接下来为了验证这点，笔者直接在主页把这段javascript写上：
 
-```
+```javascript
 <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 <script>
     var svg = d3.select("svg");
@@ -57,11 +59,13 @@ tags: D3 NODEJS
 
 使用以上功能，笔者很快就定位到问题所在。当执行完
 
-`var circleEnter = ircle.enter().append("circle");`
+```javascript
+var circleEnter = ircle.enter().append("circle");
+```
 
 发现circleEnter对象如开始时描述一样，有个数据的前三个为null；而circle对象则在原来基础上增加了第四个圆，且前三个都保留着。从而，教程是有问题的，正确的代码应该是：
 
-```
+```html
 <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 <script>
     var svg = d3.select("svg");

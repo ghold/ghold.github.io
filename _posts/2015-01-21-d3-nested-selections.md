@@ -15,13 +15,17 @@ D3支持`d3.selectAll("A B")`的方式内嵌选择器，这个跟`d3.select("A")
 
 ###嵌套与索引
 
-`d3.selectAll("tbody td")`
+```javascript
+d3.selectAll("tbody td");
+```
 
 出来的结果是垂直结构的，td元素会自动产生递增索引。如出来的结果有16个，那么索引由0递增至15。
 
 D3的嵌套选择器保留垂直结构的特点。如
 
-`d3.selectAll("tbody tr").selectAll("td")`
+```javascript
+d3.selectAll("tbody tr").selectAll("td");
+```
 
 即使结构中多出了分组用的母节点tr，也不会影响td元素的垂直结构，td的索引还是由0递归至15。
 
@@ -31,7 +35,7 @@ D3的嵌套选择器保留垂直结构的特点。如
 
 如果嵌套选择器需要绑定一个二维数组，需要先让选择器上层绑定数组外围，在对选择器的单元绑定数据内部。如matrix为数据二维数组
 
-```
+```javascript
 var matrix = [
   [ 0,  1,  2,  3],
   [ 4,  5,  6,  7],
@@ -42,17 +46,22 @@ var matrix = [
 
 第一重绑定为
 
-`var tr = d3.selectAll("tbody tr").data(matrix)`，
+```javascript
+var tr = d3.selectAll("tbody tr").data(matrix);
+```
+，第二重绑定为
 
-第二重绑定为
+```javascript
+tr.selectAll("td").data(function(d){return d;});
+```
 
-`tr.selectAll("td").data(function(d){return d;})`。
+。注意不能直接使用
 
-注意不能直接使用
+```javascript
+d3.selectAll("tbody tr td").data(matrix);
+```
 
-`d3.selectAll("tbody tr td").data(matrix)`
-
-那是因为matrix的值个数为16，但是第一次绑定时，d3认为那是含有四个数组的数组而已，职能绑定选择器的前4项。
+，那是因为matrix的值个数为16，但是第一次绑定时，d3认为那是含有四个数组的数组而已，职能绑定选择器的前4项。
 
 ---
 
@@ -60,13 +69,17 @@ var matrix = [
 
 使用嵌套选择器存在一个隐藏的特性：对每个元素分组都会设定一个母节点。增加节点的操作是会针对这个母节点下添加。如果在一开始就使用嵌套选择器，如（matrix数组的个数要比原始tr元素多才有效果）
 
-`d3.select("tbody tr").data(matrix).enter().append("tr")`，
+```javascript
+d3.select("tbody tr").data(matrix).enter().append("tr");
+```
 
-这个结果会报一个错：节点无法添加tr元素。原因其实是开始使用的嵌套选择器会默认把网页的根几点html作为默认的选择器母节点，而html节点下是不能添加tr元素的。这个时候可以选择放弃嵌套：
+，这个结果会报一个错：节点无法添加tr元素。原因其实是开始使用的嵌套选择器会默认把网页的根几点html作为默认的选择器母节点，而html节点下是不能添加tr元素的。这个时候可以选择放弃嵌套：
 
-`d3.select("tbody").selectAll("tr").data(matrix).enter().append("tr")`，
+```javascript
+d3.select("tbody").selectAll("tr").data(matrix).enter().append("tr");
+```
 
-让母节点设置为tbody。
+，让母节点设置为tbody。
 
 ---
 

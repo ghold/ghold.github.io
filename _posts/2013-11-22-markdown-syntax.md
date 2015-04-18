@@ -7,8 +7,15 @@ tags: MARKDOWN
 
 **强调格式**
 
-`*italic*   **bold**`：*italic*   **bold**  
-`_italic_   __bold__`：_italic_   __bold__
+```
+*italic*   **bold** :
+```
+*italic*   **bold** 
+
+```
+_italic_   __bold__ :
+```
+_italic_   __bold__
 
 ***
 
@@ -16,7 +23,9 @@ tags: MARKDOWN
 
 内联：
 
-`[例子](http://url.com/ "标题")：`
+```
+[例子](http://url.com/ "标题"):
+```
 
 [例子](http://ghold.net/ "ghold.net")
 
@@ -39,7 +48,9 @@ tags: MARKDOWN
 
 内联：
 
-`![alt text](/路径/img.jpg "标题")：`
+```
+![alt text](/路径/img.jpg "标题"):
+```
 
 ![alt text](/assets/img/2013_11_22/404.png "列子")
 
@@ -199,11 +210,13 @@ atx方式(后续的#可以选填)：
 
 三个以上的破折号或型号产生水平线：
 
-`---`
+```
+---
 
-`***`
+***
 
-`- - - -`
+- - - -
+```
 
 ***
 

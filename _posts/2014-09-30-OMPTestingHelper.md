@@ -75,7 +75,7 @@ static部分是用于请求处理里`static`方法的配置，后缀与接收格
 
 store部分是提供展示的结构，用于解析和展示返回的Json。此配置的格式为：
 
-```
+```json
 "store": {
 	"store_name": {
 		"cn_name":"中文名称",
@@ -137,7 +137,7 @@ store部分是提供展示的结构，用于解析和展示返回的Json。此�
 
 routeinterface部分提供内部静态路由接口查询功能。基本配置：
 
-```
+```json
 "routeinterface":{
 	"interfaceName2":{
 		"name":"接口名称",

@@ -27,7 +27,9 @@ tags: D3
 
 d3.format()返回一个format指示符，用于数值格式化使用。接受的参数如下格式：
 
-`[​[fill]align][sign][symbol][0][width][,][.precision][type]`
+```
+[​[fill]align][sign][symbol][0][width][,][.precision][type]
+```
 
 * fill：需要跟align一起使用。指定字符用于填充align对齐后的空间，字符不能是`{`或`}`。
 * align：指定格式的对齐方式，`>`为右对齐（默认），`<`为左对齐，`^`为居中对齐，空位由fill填充。
@@ -60,34 +62,34 @@ d3.format()返回一个format指示符，用于数值格式化使用。接受的
 
 linear会根据定义域[a, b]和值域[c, d]有
 
-```
+```Mathematica
 ax + y = c
 bx + y = d
 ```
 
 这样就可以分别计算出
 
-```
+```Mathematica
 x = (d-c)/(b-a)
 y = c - a(d-c)/(b-a)
 ```
 
 所以对于任意在定义域中的数值z都可以计算出结果为
 
-```
+```Mathematica
 z(d-c)/(b-a) + c - a(d-c)/(b-a) 
 ```
 
 ordinal接受的定义域是离散的。譬如例子中的州名称分类。虽然我们在分析例子源码时发现值域类似linear的，放入[c, d]这样的连续集合，但是ordinal的内部值域分解机制会散列这个连续集合。以rangeBands为例，会产生离散的间隔带，设定义域中元素个数为x，离散内间隔系数为k，外间隔系数为l，则有
 
-```
+```Mathematica
 w + ks = s
 xs + 2ls = d-c
 ```
 
 其中w为带宽，s为步长，结果为
 
-```
+```Mathematica
 s = (d-c)/(x+2l)
 w = (1-k)(d-c)/(x+2l)
 ```
@@ -100,7 +102,9 @@ w = (1-k)(d-c)/(x+2l)
 
 这个有趣的功能，如果不看源码，估计是猜不出来。尝试按着alt键，再选择下拉框的项，看看是不是变成慢动作了？这个功能对于观察对象连贯性非常有用。这里利用了javascript的按键事件。
 
-`d3.select("window").on("keydown", funciton()(altKey = d3.event.altKey))`
+```javascript
+d3.select("window").on("keydown", funciton()(altKey = d3.event.altKey));
+```
 
 这句保证了两个事实：
 

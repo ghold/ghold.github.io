@@ -23,17 +23,22 @@ tags: JQUERY
 
 最终的实现代码如下：
 
-```
+```javascript
 $.extend($.expr[':'],{
 	top: function(a,i,m) {
-		if(($(a).offset().top – 10) <= m[3] && ($(a).next(a).offset().top – 10) > m[3]){return $(a); }
+		if(( $(a).offset().top – 10) <= m[3] 
+            && ( $(a).next(a).offset().top – 10 ) > m[3] ){
+            return $(a); 
+        }
 	}
 });
 ```
 
 最后只需要调用
 
-`$(“.blog_bg:top(浮标位置)”)`
+```javascript
+$('.blog_bg:top(浮标位置)')
+```
 
 轻松把与浮标同一水平的文章选择出来了。
 

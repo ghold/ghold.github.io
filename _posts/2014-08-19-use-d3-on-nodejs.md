@@ -17,30 +17,39 @@ nodejs拥有异步I/O、事件驱动等优点。不过笔者对以上两个特�
 
 接下来是安装d3，有npm的帮助，也是很容易：
 
-`npm install d3`
+```Bash
+npm install d3
+```
 
-由于是编译安装，所以安装过程中可能会有各种问题，如找不到python、编译C用的编译器找不到等等。（笔者屌丝，买不起mac，所以只能在Windows下开发）建议1.安装[python 2.7](https://www.python.org/downloads/)并配置PYTHON_HOME为python安装目录；2.安装[Microsoft Visual Studio 2012 Express](http://www.microsoft.com/zh-cn/download/details.aspx?id=34673)并在命令行执行：
+由于是编译安装，所以安装过程中可能会有各种问题，如找不到python、编译C用的编译器找不到等等。（笔者屌丝，买不起mac，所以只能在Windows下开发）建议
 
-`npm config set msvs_version 2012 --global`
+1. 安装[python 2.7](https://www.python.org/downloads/)并配置PYTHON_HOME为python安装目录；
+2. 安装[Microsoft Visual Studio 2012 Express](http://www.microsoft.com/zh-cn/download/details.aspx?id=34673)并在命令行执行：
+
+    ```Bash
+    npm config set msvs_version 2012 --global
+    ```
 
 在安装过程中，我们可以发现d3需要依赖一个名为jsdom的库。这个就是我们在node内部模拟dom对象的关键库。jsdom可以把html文本转换为dom对象，使得d3可以在node内部随意使用自己的api处理这个dom对象。jsdom的用法也很简单：
 
-```
+```javascript
 var jsdom = require('jsdom')
 var index = fs.readFileSync('./lessons/1/template/index.html', 'utf-8');
 jsdom.env({
     features : { QuerySelector : true }
 	, html : index
 	, done : function(errors, window) {
-	    var body = window.document.querySelector('body')
+	    var body = window.document.querySelector('body');
 		//to do
 	}
-})
+});
 ```
 
 接着就可以使用d3随意处理body对象，处理完毕后通过：
 
-`var svgsrc = window.document.innerHTML`
+```javascript
+var svgsrc = window.document.innerHTML;
+```
 
 取出处理结果，利用server框架输出到浏览器即可。
 
