@@ -1,6 +1,5 @@
 encoding: utf-8
 excerpt_separator: "<!-- excerpt -->"
-highlighter: rouge
 markdown: kramdown
 
 kramdown: 
