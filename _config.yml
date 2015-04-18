@@ -1,7 +1,4 @@
 encoding: utf-8
 excerpt_separator: "<!-- excerpt -->"
-markdown: kramdown
-
-kramdown: 
-    input: GFM
-    syntax_highlighter: rouge
+highlighter: pygments
+markdown: redcarpet
