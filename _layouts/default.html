@@ -7,9 +7,13 @@
 			<div class = "content_side">
 				<h3>{{ page.title }}</h3>
 				<p><a href="/map.html#{{ page.category| upcase }}">{{ page.category| upcase}}</a> | 
-				{% for tag in page.tags %}
-					<a href="/map.html#{{ tag| upcase }}">{{ tag| upcase }}</a>{% unless page.tags.last == tag %}, {% endunless %}
-
+                {% if page.tags.last %}
+                    {% assign tags = page.tags %}
+                {% else %}
+                    {% assign tags = page.tags|split:"," %}
+                {% endif %}
+				{% for tag in tags %}
+					<a href="/map.html#{{ tag| upcase }}">{{ tag| upcase }}</a>{% unless tags.last == tag %}, {% endunless %}
 				{% endfor %}
 				</p>
 				{{ content }}
