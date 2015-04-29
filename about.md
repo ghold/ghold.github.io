@@ -68,9 +68,15 @@ Twitter：[https://twitter.com/Gholdnet](https://twitter.com/Gholdnet)
 * [Jquery](https://jquery.org/)：增强浏览器内交互
 * 及其他支持技术
 
-####博客的现状？
+####博客的现状
 
 博客处于没完成阶段，包括内容和元素。内容的完善是一个漫长过程，最近会先继续完成d3js的一些实践翻译。元素是指博客的功能元素，如右侧留空的设计，导航的设计、页脚设计等等。
+
+####博客的模块
+
+* [TECHNIQUE](./map.html#TECHNIQUE)：一些技术相关
+* [PROJECT](./map.html#PROJECT)：工作相关总结
+* [STUDY](./map.html#STUDY)：学习相关总结或翻译
 
 ####为什么不使用主流的博客平台而折腾这种方式？
 
