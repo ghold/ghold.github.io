@@ -21,13 +21,13 @@ header {
 	float: left;
 }
 
-#side {
+#side,#active_side {
 	width: 20%;
 	display:block;
 	float: left;
 }
 
-#side li {
+#side li, #active_side li {
 	list-style: none;
 }
 

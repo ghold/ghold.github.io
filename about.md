@@ -55,7 +55,7 @@ Twitter：[https://twitter.com/Gholdnet](https://twitter.com/Gholdnet)
 ---
 ###关于博客
 
-如上所介绍，这个博客会记录知识积累的过程。
+如上所介绍，这个小博会记录知识积累的过程。
 
 首先要感谢以下的组织或开源项目，木有他们就木有这个博客：
 
@@ -68,11 +68,11 @@ Twitter：[https://twitter.com/Gholdnet](https://twitter.com/Gholdnet)
 * [Jquery](https://jquery.org/)：增强浏览器内交互
 * 及其他支持技术
 
-####博客的现状
+####小博的现状
 
 博客处于没完成阶段，包括内容和元素。内容的完善是一个漫长过程，最近会先继续完成d3js的一些实践翻译。元素是指博客的功能元素，如右侧留空的设计，导航的设计、页脚设计等等。
 
-####博客的模块
+####小博的模块
 
 * [TECHNIQUE](./map.html#TECHNIQUE)：一些技术相关
 * [PROJECT](./map.html#PROJECT)：工作相关总结
@@ -84,5 +84,3 @@ Twitter：[https://twitter.com/Gholdnet](https://twitter.com/Gholdnet)
 2. 完善的过程可以保持积极的状态；
 3. 可以自定义各种有趣的技术，不局限于平台框架；
 4. 完成过程是可以通过Github进行共享，正如Git的作者所说“你可以知道除了第一个版本，Git是如何完成的”，每个人都可以知道我的博客是[怎样建成](https://github.com/ghold/ghold.github.io)的。
-
-
