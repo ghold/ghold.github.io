@@ -15,6 +15,10 @@ header {
 	float: left;
 }
 
+#main a:hover{
+    color: rgba(204,0,0,0.8)
+}
+
 #space {
 	width: 20%;
 	display: block;

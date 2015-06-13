@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8" >
-    <link href="/assets/css/metro-bootstrap.css" rel="stylesheet">
+    <link href="/assets/css/metro.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/assets/css/default.css">
     <link href="/assets/css/petty_colors.css" rel="stylesheet">
     <script src="/assets/js/jquery/jquery.min.js"></script>
@@ -12,19 +12,16 @@
     <title>{{ page.title }} | Ghold's Programming Version</title>
 </head>
 <body class="metro">
-    <header class="bg-dark">
-	<div class="navigation-bar dark fixed-top">
-        <div class="navigation-bar-content">
-			<div class="element top_title"><a href="/">
-                Ghold's Programming Version</a></div>
+    <header class="app-bar bg-grayDark" data-role="appbar">
+        <a class="app-bar-element" href="/">
+                Ghold's Programming Version</a>
+        <span class="app-bar-divider bg-darkRed"></span>
+        <ul class="app-bar-menu">
 			{% for cate in site.categories %}
-                <div class="element">
+                <li>
                 	<a href="/map.html#{{ cate | first | upcase }}">{{ cate | first | upcase}}</a>
-                </div>
+                </li>
             {% endfor %}
-                <div class="element">
-                    <a href="/about.html">ABOUT</a>
-                </div>
-        </div>
-	</div>
+        </ul>
+        <a class="app-bar-element" href="about.html">ABOUT</a>
     </header>

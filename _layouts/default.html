@@ -28,6 +28,18 @@
         </div>
         <div id= "active_side">
             <ul>
+                <li>
+                    <div class="tabcontrol" data-role="tabControl">
+                        <ul class="tabs">
+                            <li><a href="#daily_task">每日任务</a></li>
+                            <li><a href="#daily_activity">每日活动</a></li>
+                        </ul>
+                        <div class="frames">
+                            <div class="frame" id="daily_task">今日任务</div>
+                            <div class="frame" id="daily_activity">今日活动</div>
+                        </div>
+                    </div>
+                </li>
                 <li>{% include responsibility.md %}</li>
             </ul>
         </div>
