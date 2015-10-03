@@ -10,7 +10,30 @@
             {% endfor %}
             </ul>
         </div>
+        <div id= "active_side">
+            <ul>
+                <li>
+                    <div class="tabcontrol" data-role="tabControl">
+                        <ul class="tabs">
+                            <li><a href="#daily_task">Dojo</a></li>
+                        </ul>
+                        <div class="frames">
+                            <div class="frame" id="daily_task">
+                                <h5 id="title"></h6>
+                                <hr />
+                                <p id="content"></p>
+                                <hr />
+                                <p><span id="status"></span>
+                                    <span></span>
+                                    <span  id="duration"></span></p>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li>{% include responsibility.md %}</li>
+            </ul>
+        </div>
     </div>
-    
+
 </body>
 </html>
