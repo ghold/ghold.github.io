@@ -114,7 +114,7 @@ im.save(mImgFile, 'JPEG', quality = 100)
 
 10. 循环移上步骤不断修正test.traineddata
 
-最后，主角回归，使用pycor对测试集进行识别。选择pycor的一个重要原因是，pycor和python-tesseract都不支持python3.3。我尝试过对python-tesseract的源码进行编译python3.3的版本，可惜水平不够，只能失败告终。而pycor源码比较简单，只是判断识别码的话足够了，而且对python3.3的兼容性优化几步搞掂。在这个小项目期间还发现了pycor不支持psm参数，自行添加上了。
+最后，主角回归，使用pyocr对测试集进行识别。选择pyocr的一个重要原因是，pyocr和python-tesseract都不支持python3.3。我尝试过对python-tesseract的源码进行编译python3.3的版本，可惜水平不够，只能失败告终。而pyocr源码比较简单，只是判断识别码的话足够了，而且对python3.3的兼容性优化几步搞掂。在这个小项目期间还发现了pyocr不支持psm参数，自行添加上了。
 
 结果令人满意，测试集的准确率达到100%。实际上用在自动化测试中也是没发现问题（当然，人家都屏蔽了-_-）
 
