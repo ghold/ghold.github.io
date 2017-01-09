@@ -15,7 +15,7 @@ $(function(){
     };
 
     $.get(
-        "http://157.7.109.186:8090/api/v1/task", function(data) {
+        "http://139.162.67.72:8090/api/v1/task", function(data) {
             if (data) {
                 if (data.meta.status == 1){
                     $("#daily_task #title").html(data.data.task.title);
