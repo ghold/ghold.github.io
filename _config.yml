@@ -1,4 +1,4 @@
 encoding: utf-8
 excerpt_separator: "<!-- excerpt -->"
 highlighter: rouge
-markdown: redcarpet
+markdown: kramdown
