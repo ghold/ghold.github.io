@@ -17,7 +17,7 @@ nodejs拥有异步I/O、事件驱动等优点。不过笔者对以上两个特�
 
 接下来是安装d3，有npm的帮助，也是很容易：
 
-```Bash
+```
 npm install d3
 ```
 
@@ -26,7 +26,7 @@ npm install d3
 1. 安装[python 2.7](https://www.python.org/downloads/)并配置PYTHON_HOME为python安装目录；
 2. 安装[Microsoft Visual Studio 2012 Express](http://www.microsoft.com/zh-cn/download/details.aspx?id=34673)并在命令行执行：
 
-    ```Bash
+    ```
     npm config set msvs_version 2012 --global
     ```
 

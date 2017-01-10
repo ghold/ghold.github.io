@@ -13,7 +13,7 @@ D3支持`d3.selectAll("A B")`的方式内嵌选择器，这个跟`d3.select("A")
 
 ---
 
-###嵌套与索引
+### 嵌套与索引
 
 ```javascript
 d3.selectAll("tbody td");
@@ -31,7 +31,7 @@ d3.selectAll("tbody tr").selectAll("td");
 
 ---
 
-###嵌套与数据
+### 嵌套与数据
 
 如果嵌套选择器需要绑定一个二维数组，需要先让选择器上层绑定数组外围，在对选择器的单元绑定数据内部。如matrix为数据二维数组
 
@@ -65,7 +65,7 @@ d3.selectAll("tbody tr td").data(matrix);
 
 ---
 
-###嵌套与母节点
+### 嵌套与母节点
 
 使用嵌套选择器存在一个隐藏的特性：对每个元素分组都会设定一个母节点。增加节点的操作是会针对这个母节点下添加。如果在一开始就使用嵌套选择器，如（matrix数组的个数要比原始tr元素多才有效果）
 
@@ -83,7 +83,7 @@ d3.select("tbody").selectAll("tr").data(matrix).enter().append("tr");
 
 ---
 
-###是否需要内嵌
+### 是否需要内嵌
 
 这里提到，在select和selectAll之间存在一个重要的区别：select方法会*保留*存在的分组，而selectAll会*新建*一个分组。使用select方法会保留数据、索引、原选择器的母节点。
 

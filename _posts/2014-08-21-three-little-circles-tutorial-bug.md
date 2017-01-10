@@ -65,7 +65,7 @@ var circleEnter = ircle.enter().append("circle");
 
 发现circleEnter对象如开始时描述一样，有个数据的前三个为null；而circle对象则在原来基础上增加了第四个圆，且前三个都保留着。从而，教程是有问题的，正确的代码应该是：
 
-```html
+```
 <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 <script>
     var svg = d3.select("svg");

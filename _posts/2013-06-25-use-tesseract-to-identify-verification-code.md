@@ -16,7 +16,7 @@ tags: PYTHON TESSERACT
 <!-- excerpt -->
 ---
 
-###今天的主角：
+### 今天的主角：
 
 ![alt text](/assets/img/2013_06_25/1.jpg "原始验证码")
 
@@ -24,7 +24,7 @@ tags: PYTHON TESSERACT
 
 ![alt text](/assets/img/2013_06_25/2.jpg "转换后")
 
-###这里有个注意点：
+### 这里有个注意点：
 
  - 图片大小。原图只有96×30大小，在之后训练traineddata时比较恶心，建议尽量放大点（这里放大了5倍）
  - 保存质量。开始时不懂这个属性，导致保存的图会出现灰色的斑点，影响识别质量。后来在google上查找“PIL如何保存高质量图”时找到了答案：
@@ -32,7 +32,7 @@ tags: PYTHON TESSERACT
 ```python
 im.save(mImgFile, 'JPEG', quality = 100)
 ```
-	
+
 使用tesseract自带的eng. Traineddata进行识别时会出现不同程度错判，譬如会出现特殊符号、无法判断出结果。先来解决第一个问题。根据我拿到的验证码规律，是由数字和小写英文字母组成，所以我觉得自行训练一个traineddata。Traineddata是提供给tesseract进行光学识别使用的，自行训练的traineddata可提高特定类似字体的识别准确率。
 
 ---
@@ -40,22 +40,22 @@ im.save(mImgFile, 'JPEG', quality = 100)
 开始时我参考这篇文章进行操作，对快速入门非常有用。下面简述我的过程：
 
 1. 选取训练集和测试集
-	
+
 	由于要识别的主角比较简单，我大概选择了50个图片，分4批：6、12、24、8，其中8时测试集
 
 2. 生成训练集box
-	
+
 	开始时我跟着参考文章走，结果发现一个现象，有些图片无论如何都无法产生box，或是如果自行添加box，在训练时也会报错。这个问题我一直以为是tesseract的主观意识（就是bug了）。我把这些图片列为Bad Imgs。
 
 	直至看到一篇文章上提到了一下关于tesseract3的一个特性参数psm。如果安装了tesseract3，可以在cmd或者shell中输入tesseract查看。这个特性有11个参数，我没有根究默认是什么参数，反正如果时一列字符串建议选择7。
 
-	```PowerShell
+	```
 	tesseract eng.ver.001.jpg eng.ver.001 -l eng –psm 7 batch.nochop makebox
 	```
 
 	如果后期生成了test. Traineddata，也可以使用
 
-	```PowerShell
+	```
 	tesseract eng.ver.001.jpg eng.ver.001 -l eng –psm 7 batch.nochop makebox
 	```
 
@@ -67,7 +67,7 @@ im.save(mImgFile, 'JPEG', quality = 100)
 
 4.	训练box，产生tr文件
 
-	```PowerShell
+	```
 	tesseract eng.ver.001.jpg eng.ver.001 –psm 7 nobatch box.train
 	```
 
@@ -75,7 +75,7 @@ im.save(mImgFile, 'JPEG', quality = 100)
 
 5. 产生字符集
 
-	```PowerShell
+	```
 	unicharset_extractor eng.ver.001.tr eng.ver.002.tr eng.ver.003.tr
 	```
 
@@ -83,7 +83,7 @@ im.save(mImgFile, 'JPEG', quality = 100)
 
 6. 生成inttemp（图像原型）、shapetable和pffmtable（字符出现次数）文件
 
-	```PowerShell
+	```
 	mftraining -U unicharset -O test.unicharset eng.ver.001.tr eng.ver.002.tr eng.ver.003.tr
 	```
 
@@ -94,11 +94,11 @@ im.save(mImgFile, 'JPEG', quality = 100)
     1. 需要一个合适的命名。Tesseract的文档中强调了图像的命名格式——[lang].[fontname].exp[num].tif，并不是毫无意义的，其中fontname字段的存在最为重要。验证方式在第4步的执行中输出font为ver
 
     2. 需要一个font_properties文件。开始时由于命名问题，一直不知道网上说这个文件要配置的Font是啥。其实就是简单的把ver 0 0 0 0 0和回车加上，保存为无-BOM UTF-8 UNIX换行符即可。
-    
+
 
 7. 生成normproto文件（具体也不清楚干啥的）
 
-	```PowerShell
+	```
 	cntraining eng.ver.001.tr eng.ver.002.tr eng.ver.003.tr
 	```
 
@@ -106,8 +106,8 @@ im.save(mImgFile, 'JPEG', quality = 100)
 
 9. 合成test. traineddata
 
-	```PowerShell
-	combine_tessdata test. 
+	```
+	combine_tessdata test.
 	```
 
 	还是为了懒惰，4-9步已合成一个py
