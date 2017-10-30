@@ -10,22 +10,26 @@ tags: GHOLD
 <style>
 img {
     float:left;
-    padding-right:10px
+    padding-right:10px;
+		width: 230px;
+		height: 230px;
 }
 
 #qrcode {
     position:absolute;
+		width: 230px;
+		height: 230px;
 }
 
 #social {
-    color:rgba(204, 0, 0,0.8)
+    color:rgba(204, 0, 0,0.8);
 }
 </style>
 ![你好，我是啊浩](/assets/img/about/ghold.jpg "你好，我是啊浩")
 
 <div id="qrcode"><img src="assets/img/about/qrcode.jpg" /></div>
 
-###网络社交
+### 网络社交
 
 ---
 
@@ -42,7 +46,7 @@ Github：[https://github.com/ghold](https://github.com/ghold)
 Twitter：[https://twitter.com/Gholdnet](https://twitter.com/Gholdnet)
 
 ---
-###关于我
+### 关于我
 
 大家好，我是老家浩，英文名Ghold，绰号老鬼，不少机友（电玩同好者）也喜欢叫我鬼爷。
 
@@ -55,7 +59,7 @@ Twitter：[https://twitter.com/Gholdnet](https://twitter.com/Gholdnet)
 知识观是“书中有路勤为径，学海无涯苦作舟”。喜欢涉猎各种知识（暂时是编程知识），但是暂时感觉没有很精通的，因为不论哪方面，都见过比自己牛很多的人。不过我属于不要脸那种——无论什么都会学一下，并且总结也好，翻译也罢，都会出来一点东西。这个博客也是实践之一。
 
 ---
-###关于博客
+### 关于博客
 
 如上所介绍，这个小博会记录知识积累的过程。
 
@@ -70,17 +74,17 @@ Twitter：[https://twitter.com/Gholdnet](https://twitter.com/Gholdnet)
 * [Jquery](https://jquery.org/)：增强浏览器内交互
 * 及其他支持技术
 
-####小博的现状
+#### 小博的现状
 
 博客处于没完成阶段，包括内容和元素。内容的完善是一个漫长过程，最近会先继续完成d3js的一些实践翻译。元素是指博客的功能元素，如右侧留空的设计，导航的设计、页脚设计等等。
 
-####小博的模块
+#### 小博的模块
 
 * [TECHNIQUE](./map.html#TECHNIQUE)：一些技术相关
 * [PROJECT](./map.html#PROJECT)：工作相关总结
 * [STUDY](./map.html#STUDY)：学习相关总结或翻译
 
-####为什么不使用主流的博客平台而折腾这种方式？
+#### 为什么不使用主流的博客平台而折腾这种方式？
 
 1. 不要脸，简称装（此处可以吐槽）；
 2. 完善的过程可以保持积极的状态；
