@@ -69,5 +69,10 @@ div.map {
 
 div.map_date_side{
 	text-align: left;
-	padding-left: 10px; 
+	padding-left: 10px;
+}
+
+li {
+	width: auto;
+	margin: 0;
 }

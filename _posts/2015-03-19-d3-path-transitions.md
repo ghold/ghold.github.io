@@ -16,8 +16,11 @@ tags: D3
 <link rel="stylesheet" href="/assets/css/d3_path_transitions/default.css">
 <script type="text/javascript" src="/assets/js/d3_path_transitions/share.js" ></script>
 
-<example_1></example_1>
+<link href="/assets/css/metro.min.css" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/default.css">
+<link href="/assets/css/petty_colors.css" rel="stylesheet">
 
+<example_1></example_1>
 <script type="text/javascript" src="/assets/js/d3_path_transitions/example_1.js" ></script>
 
 实际上，在对两条路径进行插值时，有多种有效的理解。一种理解是在不变x轴点上修改y的值；另一种是理解是随时间的变化可以呈现一个以x轴为引导的推拉窗效果。第二种是我们想要的方式，但我们怎样告诉D3在x轴上插值而不是在y轴上插值呢？

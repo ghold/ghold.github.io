@@ -89,6 +89,9 @@ selection.data会执行update处理，update的结果会绑定到元素上，匹
 例子根据索引进行绑定的原理。
 
 <link rel="stylesheet" href="/assets/css/d3_data_binding/default.css">
+<link href="/assets/css/metro.min.css" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/default.css">
+<link href="/assets/css/petty_colors.css" rel="stylesheet">
 
 <example1></example1>
 

@@ -19,6 +19,10 @@ tags: D3
 
 <script type="text/javascript" src="/assets/js/d3_object_constancy/share.js" ></script>
 
+<link href="/assets/css/metro.min.css" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/default.css">
+<link href="/assets/css/petty_colors.css" rel="stylesheet">
+
 以下介绍这个例子中有趣的知识点：
 
 ---
