@@ -49,13 +49,13 @@ im.save(mImgFile, 'JPEG', quality = 100)
 
 	直至看到一篇文章上提到了一下关于tesseract3的一个特性参数psm。如果安装了tesseract3，可以在cmd或者shell中输入tesseract查看。这个特性有11个参数，我没有根究默认是什么参数，反正如果时一列字符串建议选择7。
 
-	```
+	```shell
 	tesseract eng.ver.001.jpg eng.ver.001 -l eng –psm 7 batch.nochop makebox
 	```
 
 	如果后期生成了test. Traineddata，也可以使用
 
-	```
+	```shell
 	tesseract eng.ver.001.jpg eng.ver.001 -l eng –psm 7 batch.nochop makebox
 	```
 
@@ -67,7 +67,7 @@ im.save(mImgFile, 'JPEG', quality = 100)
 
 4.	训练box，产生tr文件
 
-	```
+	```shell
 	tesseract eng.ver.001.jpg eng.ver.001 –psm 7 nobatch box.train
 	```
 
@@ -75,7 +75,7 @@ im.save(mImgFile, 'JPEG', quality = 100)
 
 5. 产生字符集
 
-	```
+	```shell
 	unicharset_extractor eng.ver.001.tr eng.ver.002.tr eng.ver.003.tr
 	```
 
@@ -83,7 +83,7 @@ im.save(mImgFile, 'JPEG', quality = 100)
 
 6. 生成inttemp（图像原型）、shapetable和pffmtable（字符出现次数）文件
 
-	```
+	```shell
 	mftraining -U unicharset -O test.unicharset eng.ver.001.tr eng.ver.002.tr eng.ver.003.tr
 	```
 
@@ -98,7 +98,7 @@ im.save(mImgFile, 'JPEG', quality = 100)
 
 7. 生成normproto文件（具体也不清楚干啥的）
 
-	```
+	```shell
 	cntraining eng.ver.001.tr eng.ver.002.tr eng.ver.003.tr
 	```
 
@@ -106,7 +106,7 @@ im.save(mImgFile, 'JPEG', quality = 100)
 
 9. 合成test. traineddata
 
-	```
+	```shell
 	combine_tessdata test.
 	```
 

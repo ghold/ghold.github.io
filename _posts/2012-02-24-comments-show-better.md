@@ -23,14 +23,14 @@ tags: JQUERY
 
 最终的实现代码如下：
 
-```javascript
+``` javascript
 $.extend($.expr[':'],{
-	top: function(a,i,m) {
-		if(( $(a).offset().top – 10) <= m[3] 
+  top: function(a,i,m) {
+    if(( $(a).offset().top – 10) <= m[3]
             && ( $(a).next(a).offset().top – 10 ) > m[3] ){
-            return $(a); 
+            return $(a);
         }
-	}
+  }
 });
 ```
 

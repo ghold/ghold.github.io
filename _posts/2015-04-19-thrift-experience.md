@@ -34,7 +34,7 @@ service HelloService {
 
 在Windows下，我们需要使用官方的thrift.exe对原型接口进行转化生成。在cmd中执行
 
-```
+``` powershell
 thrift.exe -r --gen java hello.thrift
 thrift.exe -r --gen js:node hello.thrift
 ```
@@ -86,7 +86,7 @@ client.getHelloInterface(arg1,arg2, function(err, res) {
 
 nodejs其实上是封装了Google开发的V8-Javascript处理器，也就是说，写的代码用的也是Javascript语言。在cmd中执行以下脚本，可以迅速产生对应的Javacript服务接口：
 
-```
+``` powershell
 thrift.exe -r --gen js hello.thrift
 ```
 

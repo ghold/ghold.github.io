@@ -17,25 +17,25 @@ https具体的概念，可以通过维基百科自行查询。本文主要介绍
 
 Let's Encrypt服务需要在远程验证域名服务器的真实性，才会颁发证书。服务器需要提供唯一识别的密钥进行识别操作。
 
-```
+```shell
 openssl genrsa -out ca-key.pem -des 4096
 ```
 
 这个操作为我们创建一个验证私钥，这时，这个私钥将会代表这台服务器对服务验证进行加密。创建时带-des，openssl要求填写密码。加密后，我们使用这个验证私钥验证证书时，都要输入密码。如果未来需要自动化更新证书有效期，为了简单，可以不设密码，去掉-des参数即可。
 
-```
+```shell
 openssl genrsa -out server-key.pem 4096
 ```
 
 这次的操作与上一次雷同，区别在于这次的私钥将会用于产生服务公钥。
 
-```
+```shell
 openssl req -new -key server-key.pem -config openssl.cnf -out server-csr.pem
 ```
 
 在执行这个命令之前，我们要在当前目录创建一个配置文件，内容大概是域名主体信息，包括主体所在国家地区、所属公司组织或机构：
 
-```
+```properties
 [req]
   distinguished_name = req_distinguished_name
   req_extensions = v3_req
@@ -79,13 +79,13 @@ openssl req -new -key server-key.pem -config openssl.cnf -out server-csr.pem
 
 Let's Encrypt服务证书签发协议使用ACME协议，即通过脚本生成验证文件到固定目录下，通过http的方式本地下载校验一次，通过http的方式远程下载校验一次。因此，我们必须要在指定的目录启动的http服务。即使在以后自动化更新证书有效期，也是需要启动http服务，要么就一直不关闭。
 
-```
+```shell
 wget https://raw.githubusercontent.com/diafygi/acme-tiny/master/acme_tiny.py
 ```
 
 先从脚本文件`acme_tiny.py`分析一下。这个脚本来自于[Github](https://github.com/diafygi/acme-tiny)，为验证服务提供了整套流程，大大提高了部署效率。启动http服务的目标是为脚本提供临时验证文件的获取。在脚本中我们可以看到带有`.well-known/acme-challenge/`的目录。这个目录是不可以更改的，而且启动的http服务中必须包含这个目录路径。目的是可以通过`http://host/.well-known/acme-challenge/`下载到验证文件。还有一点是，端口必须是80端口。
 
-```
+```shell
 python -m SimpleHTTPServer 80 # root user exec, python 2
 python -m http.server 80 # root user exec, python 3
 ```
@@ -98,14 +98,14 @@ python -m http.server 80 # root user exec, python 3
 
 一切准备完毕后，就可以执行`acme_tiny.py `脚本生成签名。执行的代码在脚本注释里有写到：
 
-```
+```shell
 python acme_tiny.py --account-key ./ca-key.pem --csr ./server-csr.pem \
 --acme-dir /path/to/.well-known/acme-challenge/ > signed.crt
 ```
 
 生成`signed.crt`后，接下来是下载Let's Encrypt服务提供的顶级证书，并加以合成。此步骤说明参看参考文档[^1]
 
-```
+```shell
 wget -O - https://letsencrypt.org/certs/lets-encrypt-x3-cross-signed.pem > intermediate.pem
 cat signed.crt intermediate.pem > chained.pem
 ```
