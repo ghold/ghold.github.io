@@ -5,7 +5,7 @@
 				<h3>{{ page.date | date: "%b %d<br >%Y"}}</h3>
 			</div>
 			<div class = "content_side">
-				<h3>{{ page.title }}</h3>
+				<h1>{{ page.title }}</h1>
 				<p><a href="/map.html#{{ page.category| upcase }}">{{ page.category| upcase}}</a> |
                 {% if page.tags.last %}
                     {% assign tags = page.tags %}
@@ -16,7 +16,9 @@
 					<a href="/map.html#{{ tag| upcase }}">{{ tag| upcase }}</a>{% unless tags.last == tag %}, {% endunless %}
 				{% endfor %}
 				</p>
-				{{ content }}
+				<div class="content">
+				  {{ content }}
+			  </div>
 			</div>
         </div>
         <div id= "side">
