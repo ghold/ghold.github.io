@@ -1,9 +1,14 @@
 {% include header.html %}
     <div id="content">
         <div id= "main">
-        	<div class = "date_side">
-				<h3>{{ page.date | date: "%b %d<br >%Y"}}</h3>
-			</div>
+          <div class = "date_side">
+            <div class = "day">
+              <span>{{ page.date | date: "%d" }}</span>
+            </div>
+            <div class = "month">
+              <span>{{ page.date | date: "%b" | upcase }}</span>
+            </div>
+          </div>
 			<div class = "content_side">
 				<h1>{{ page.title }}</h1>
 				<p><a href="/map.html#{{ page.category| upcase }}">{{ page.category| upcase}}</a> |

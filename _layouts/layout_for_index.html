@@ -5,13 +5,6 @@
         </div>
         <div id= "side">
             <ul>
-            {% for post in site.posts %}
-                <li><a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></li>
-            {% endfor %}
-            </ul>
-        </div>
-        <div id= "active_side">
-            <ul>
                 <li>
                     <div class="tabcontrol" data-role="tabControl">
                         <ul class="tabs">
@@ -32,8 +25,12 @@
                 </li>
                 <li>{% include responsibility.md %}</li>
             </ul>
+            <ul>
+            {% for post in site.posts %}
+                <li><a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></li>
+            {% endfor %}
+            </ul>
         </div>
     </div>
-
 </body>
 </html>

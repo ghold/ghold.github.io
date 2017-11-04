@@ -1,10 +1,10 @@
 ---
-layout: index
+layout: layout_for_map
 title: Ghold Learn more, Do less
 ---
 {% for cate in site.categories %}
 <div class = "date_side map_date_side">
-	<h3 id="{{ cate | first | upcase }}">{{ cate | first | upcase }}</h3>
+	<h1 id="{{ cate | first | upcase }}">{{ cate | first | upcase }}</h1>
 </div>
 <div class = "content_side map">
 	{% for post in site.categories[cate.first] %}
@@ -16,7 +16,7 @@ title: Ghold Learn more, Do less
 {% endfor %}
 {% for tag in site.tags %}
 <div class = "date_side map_date_side">
-	<h3 id="{{ tag | first | upcase }}">{{ tag | first | upcase }}</h3>
+	<h1 id="{{ tag | first | upcase }}">{{ tag | first | upcase }}</h1>
 </div>
 <div class = "content_side map">
 	{% for post in site.tags[tag.first] %}

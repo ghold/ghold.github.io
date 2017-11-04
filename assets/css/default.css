@@ -10,8 +10,12 @@ header {
 }
 
 #main {
-	width: 60%;
-	display: block;
+  /*position: absolute;*/
+  margin: 0 0 0 10%;
+  top: 0; left: 0; right: 0; bottom: 0;
+  overflow: auto;
+  padding: 0 0 0 0;
+	width: 70%;
 	float: left;
 }
 
@@ -19,15 +23,14 @@ header {
     color: rgba(204,0,0,0.8)
 }
 
-#space {
+/*#space {
 	width: 20%;
 	display: block;
 	float: left;
-}
+}*/
 
-#side,#active_side {
-	width: 20%;
-	display:block;
+#side, #active_side {
+	width: 19%;
 	float: left;
 }
 
@@ -35,18 +38,34 @@ header {
 	list-style: none;
 }
 
+.content_item {
+  width: 100%;
+  float: left;
+}
+
 .date_side {
-	width: 15%;
+	width: 10%;
 	display:block;
 	float: left;
-	text-align: right;
+	text-align: center;
+	padding-top: 10px;
 	padding-right: 5px;
 }
 
+.day {
+  font-size: 50px;
+  font-weight: bold;
+}
+
+.month {
+  font-size: 30px;
+  border-top: 2px solid #a13838;
+  border-radius: 0 0 10px 10px;
+}
+
 .content_side {
-	float: left;
-	display:block;
-	width: 85%
+  float: left;
+  width: 90%;
 }
 
 code {
@@ -64,7 +83,7 @@ div.content_side {
 }
 
 div.map {
-	padding-top: 30px;
+	padding-top: 80px;
 }
 
 div.map_date_side{

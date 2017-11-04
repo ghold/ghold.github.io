@@ -1,22 +1,28 @@
 ---
-layout: index
+layout: layout_for_index
 title: Welcome
 ---
 
 {% for post in site.posts %}
-<div class = "date_side">
-	<h3>{{ post.date | date: "%b %d<br >%Y"}}</h3>
-</div>
-<div class = "content_side">
-	<h3><a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></h3>
-	<p><a href="/map.html#{{ post.category| upcase }}">{{ post.category| upcase}}</a> | 
-	{% for tag in post.tags %}
-		<a href="/map.html#{{ tag| upcase }}">{{ tag| upcase }}</a>{% unless post.tags.last == tag %}, {% endunless %}
-
-	{% endfor %}
-	</p>
-	{{ post.excerpt | markdownify }}
-	<p><a href="{{ site.baseurl }}{{ post.url }}">查看全文..</a></p>
+<div class="content_item">
+  <div class = "date_side">
+    <div class = "day">
+      <span>{{ post.date | date: "%d" }}</span>
+    </div>
+    <div class = "month">
+      <span>{{ post.date | date: "%b" | upcase }}</span>
+    </div>
+  </div>
+  <div class = "content_side">
+  	<h1><a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></h1>
+  	<p><a href="/map.html#{{ post.category| upcase }}">{{ post.category| upcase}}</a> |
+  	{% for tag in post.tags %}
+  		<a href="/map.html#{{ tag| upcase }}">{{ tag| upcase }}</a>{% unless post.tags.last == tag %}, {% endunless %}
+  	{% endfor %}
+  	</p>
+  	{{ post.excerpt | markdownify }}
+  	<p><a href="{{ site.baseurl }}{{ post.url }}">查看全文..</a></p>
+  </div>
 </div>
 
 {% endfor %}
