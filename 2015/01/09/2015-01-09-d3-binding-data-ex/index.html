@@ -1,0 +1,525 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Ghold Lo">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="转自How Selections Work，感谢  元素分组选择器是一个分组（groups）数组，每个分组是元素（elements）数组。 使用selectAll方法，会使旧选择器变成新选择器中的一个分组。此分组中会多出一个母节点属性，会存储组中元素的母元素信息。 大多数使用，可以通过内置api自动遍历分组内每个元素。函数的第二参数可以指定处理某个索引的元素。  非分组操作只有selectAll">
+<meta property="og:type" content="article">
+<meta property="og:title" content="D3选择器原理及数据绑定练习">
+<meta property="og:url" content="http://ghold.net/2015/01/09/2015-01-09-d3-binding-data-ex/index.html">
+<meta property="og:site_name" content="Welcome|Ghold&#39;s Programming Version">
+<meta property="og:description" content="转自How Selections Work，感谢  元素分组选择器是一个分组（groups）数组，每个分组是元素（elements）数组。 使用selectAll方法，会使旧选择器变成新选择器中的一个分组。此分组中会多出一个母节点属性，会存储组中元素的母元素信息。 大多数使用，可以通过内置api自动遍历分组内每个元素。函数的第二参数可以指定处理某个索引的元素。  非分组操作只有selectAll">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2015-01-09T02:00:00.000Z">
+<meta property="article:modified_time" content="2022-02-19T07:39:55.799Z">
+<meta property="article:author" content="Ghold Lo">
+<meta property="article:tag" content="D3">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome/css/font-awesome.min.css"><script src="https://cdn.jsdelivr.net/gh/Gholdnet01/live2d-widget@latest/autoload.js"></script>
+  
+  <title>D3选择器原理及数据绑定练习 - Welcome|Ghold&#39;s Programming Version</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"ghold.net","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 6.0.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>物欲退散</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="D3选择器原理及数据绑定练习">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2015-01-09 10:00" pubdate>
+        2015年1月9日 上午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      1.9k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      17 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">D3选择器原理及数据绑定练习</h1>
+            
+            <div class="markdown-body">
+              <blockquote>
+<p>转自<a target="_blank" rel="noopener" href="http://bost.ocks.org/mike/selection/">How Selections Work</a>，感谢</p>
+</blockquote>
+<h3 id="元素分组"><a href="#元素分组" class="headerlink" title="元素分组"></a>元素分组</h3><p>选择器是一个分组（groups）数组，每个分组是元素（elements）数组。</p>
+<p>使用selectAll方法，会使旧选择器变成新选择器中的一个分组。此分组中会多出一个母节点属性，会存储组中元素的母元素信息。</p>
+<p>大多数使用，可以通过内置api自动遍历分组内每个元素。函数的第二参数可以指定处理某个索引的元素。</p>
+<hr>
+<h3 id="非分组操作"><a href="#非分组操作" class="headerlink" title="非分组操作"></a>非分组操作</h3><p>只有selectAll有针对分组的特定行为。select操作会保留现有的分组。</p>
+<p>select与selectAll不同之处，在于对旧选择器中每个元素，在新选择器中必须拥有一个元素。而且数据也会由母节点传递到子节点。</p>
+<p>append和insert方法是select的顶层封装，所以他们也会保留分组和传递数据</p>
+<!-- excerpt -->
+
+<hr>
+<h3 id="空元素"><a href="#空元素" class="headerlink" title="空元素"></a>空元素</h3><p>分组可以通过null代替没有选择到的空元素。空元素通常会被大部分操作忽略，如改变元素样式和属性的操作会屏蔽空元素。</p>
+<p>虽然操作会忽略空元素，但是空元素会占用分组索引，使用时要注意索引</p>
+<hr>
+<h3 id="绑定数据（Data）"><a href="#绑定数据（Data）" class="headerlink" title="绑定数据（Data）"></a>绑定数据（Data）</h3><p>data不是选择器的一个属性，而是选择器中元素的属性。</p>
+<p>当我们绑定一个元素在选择器上时，实际上数据会保存在DOM上：数据会分配到每个元素的__data__属性上。当某个元素缺少__data__属性，它的datum就是undefined了。</p>
+<p>绑定数据方式：</p>
+<ul>
+<li>通过selection.data，可以为选择器中的每个元素绑定数据</li>
+<li>通过selection.detum，可以为选择的单个元素绑定数据</li>
+<li>通过append、insert或select可继承母节点数据</li>
+</ul>
+<hr>
+<h3 id="什么是数据？（Data）"><a href="#什么是数据？（Data）" class="headerlink" title="什么是数据？（Data）"></a>什么是数据？（Data）</h3><p>D3中的数据指值数组。值可以是数值，可以是对象（如JSON对象），也可以是数组。</p>
+<p>selection.data可以接收一个常量，也可以接收一个方法。但是selection.data是针对每个组定义数据而不是针对单个元素。selection.data表示为一个常量数组或方法要返回一个数组支持把数据分发到选择器的每一个元素上。也就是说一个分组的选择器，拥有相应的分组数据。</p>
+<p>设计数据方法时，传入分组的母节点（d参数）和元素在分组的索引（i参数），返回一个值数组用于加入到分组中。</p>
+<hr>
+<h3 id="键引导"><a href="#键引导" class="headerlink" title="键引导"></a>键引导</h3><p>首先确认哪个元素需要绑定哪个数据。实现这个的方式是通过配对的键。当元素的键与数据的键一致时，对应的数据就会绑定到对应的元素上。最简单的方式是通过索引。</p>
+<p>其次可以自定义键方法。定义一个返回键的方法，并设为selection.data的第二参数。方法会在每个元素运行，也会在数据数组中运行。相同的键会绑定。</p>
+<hr>
+<h3 id="Enter、Update和Exit"><a href="#Enter、Update和Exit" class="headerlink" title="Enter、Update和Exit"></a>Enter、Update和Exit</h3><p>当通过键为元素绑定一个数据时，D3会得到以下三种结果：</p>
+<ul>
+<li>update：对于给定的数据集键，找到元素键匹配。</li>
+<li>enter：对于给定的数据集键，找不到元素键匹配。</li>
+<li>exit：对于给定的元素键，找不到数据集键匹配。</li>
+</ul>
+<p>selection.data会执行update处理，update的结果会绑定到元素上，匹配不上补为null；selection会执行enter处理，通过selection.enter可以获得匹配不上的数据集；selection会执行exit处理，通过selection.exit可以获得匹配不上的元素集。</p>
+<p>经过update或exit处理后的数据是一个普通的选择器，但enter处理后是一个选择器的子类。这是因为enter处理的结果元素还不算真实存在。一个enter选择器包含的是简单的只包含data属性的简单对象，而不是DOM对象。引用enter.select，才能专门把这些节点作为一个元素塞进分组母节点中。所以在进行数据绑定前，一定要通过selectAll方法进行转换，确保不是单纯的简单对象。</p>
+<hr>
+<h3 id="按默认的索引进行数据绑定"><a href="#按默认的索引进行数据绑定" class="headerlink" title="按默认的索引进行数据绑定"></a>按默认的索引进行数据绑定</h3><p>例子根据索引进行绑定的原理。</p>
+<link rel="stylesheet" href="/assets/css/d3_data_binding/default.css">
+<link href="/assets/css/metro.min.css" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/default.css">
+<link href="/assets/css/petty_colors.css" rel="stylesheet">
+
+<p><example1></example1></p>
+<ol>
+<li>初次化都是新增。</li>
+<li>如果再次执行时，新随机的个数比之前的少，之前多出的部分会通过exit退出，其他会被替换为新随机的值。棕色是被退出的值。</li>
+<li>如果再次执行时，新随机的个数比之前的多，之前的值直接被全覆盖。而绿色为多出来的位数。</li>
+</ol>
+<p>这种绑定方式是不会根据值更新的。即使是相同的值，但在不同的索引上，一样会被直接覆盖。</p>
+<h3 id="引入自定义key进行数据绑定"><a href="#引入自定义key进行数据绑定" class="headerlink" title="引入自定义key进行数据绑定"></a>引入自定义key进行数据绑定</h3><p>例子采用了名字为key的绑定原理。</p>
+<p><example2></example2></p>
+<p>在绑定时使用了</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><pre><code class="hljs javascript">.<span class="hljs-title function_">data</span>(data, <span class="hljs-keyword">function</span>(<span class="hljs-params">d</span>) &#123;<span class="hljs-keyword">return</span> d&#125;)<br></code></pre></td></tr></table></figure>
+
+<p>这句会在选择器的每个元素都跑一次，也会在data数组中每个索引跑一次。两者产生的结果相同的话，就会绑定在一起。</p>
+<ol>
+<li>如果上次存在的字母，新的也存在，则变为黑色。</li>
+<li>如果上次不存在的字母，新的存在，则新增为绿色。</li>
+<li>如果上次存在的字母，新的不存在，则置为棕色并退出。</li>
+</ol>
+<p>这种方式看起来会更加符合更新逻辑。</p>
+<p><example3></example3></p>
+<script type="text/javascript" src="/assets/js/d3_data_binding/share.js"></script>
+
+<blockquote>
+<p>Written with <a target="_blank" rel="noopener" href="https://stackedit.io/">StackEdit</a>.</p>
+</blockquote>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/STUDY/">STUDY</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/D3/">D3</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2015/01/21/2015-01-21-d3-nested-selections/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">D3内嵌选择器</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2014/09/30/2014-09-30-OMPTestingHelper/">
+                        <span class="hidden-mobile">OMPTestingHelper介绍</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>

@@ -1,0 +1,516 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Ghold Lo">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="转自Working with Transitions，感谢  D3使用selection.transition可以在改变DOM时简单实现动画的效果。举个简单的例子，实现一个改变页面字体颜色的代码为： 1d3.select(&quot;body&quot;).style(&quot;color&quot;, &quot;red&quot;);  如果加上变换及变化的时长，一个简单的字体变颜色的动画">
+<meta property="og:type" content="article">
+<meta property="og:title" content="D3转变器详解">
+<meta property="og:url" content="http://ghold.net/2015/02/07/2015-02-07-d3-transition/index.html">
+<meta property="og:site_name" content="Welcome|Ghold&#39;s Programming Version">
+<meta property="og:description" content="转自Working with Transitions，感谢  D3使用selection.transition可以在改变DOM时简单实现动画的效果。举个简单的例子，实现一个改变页面字体颜色的代码为： 1d3.select(&quot;body&quot;).style(&quot;color&quot;, &quot;red&quot;);  如果加上变换及变化的时长，一个简单的字体变颜色的动画">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2015-02-07T02:00:00.000Z">
+<meta property="article:modified_time" content="2022-02-19T07:39:11.564Z">
+<meta property="article:author" content="Ghold Lo">
+<meta property="article:tag" content="D3">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome/css/font-awesome.min.css"><script src="https://cdn.jsdelivr.net/gh/Gholdnet01/live2d-widget@latest/autoload.js"></script>
+  
+  <title>D3转变器详解 - Welcome|Ghold&#39;s Programming Version</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"ghold.net","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 6.0.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>物欲退散</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="D3转变器详解">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2015-02-07 10:00" pubdate>
+        2015年2月7日 上午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      4k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      34 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">D3转变器详解</h1>
+            
+            <div class="markdown-body">
+              <blockquote>
+<p>转自<a target="_blank" rel="noopener" href="http://bost.ocks.org/mike/transition/">Working with Transitions</a>，感谢</p>
+</blockquote>
+<p>D3使用selection.transition可以在改变DOM时简单实现动画的效果。举个简单的例子，实现一个改变页面字体颜色的代码为：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><pre><code class="hljs javascript">d3.<span class="hljs-title function_">select</span>(<span class="hljs-string">&quot;body&quot;</span>).<span class="hljs-title function_">style</span>(<span class="hljs-string">&quot;color&quot;</span>, <span class="hljs-string">&quot;red&quot;</span>);<br></code></pre></td></tr></table></figure>
+
+<p>如果加上变换及变化的时长，一个简单的字体变颜色的动画就有了（默认为黑色）：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs javascript">d3.<span class="hljs-title function_">select</span>(<span class="hljs-string">&quot;body&quot;</span>).<span class="hljs-title function_">transition</span>().<span class="hljs-title function_">duration</span>(<span class="hljs-number">2000</span>).<span class="hljs-title function_">style</span>(<span class="hljs-string">&quot;color&quot;</span>, <span class="hljs-string">&quot;red&quot;</span>);<br></code></pre></td></tr></table></figure>
+
+<p>以下开始了解转变的细节。</p>
+<!-- excerpt -->
+
+<hr>
+<h3 id="转变器是一种动画形式"><a href="#转变器是一种动画形式" class="headerlink" title="转变器是一种动画形式"></a>转变器是一种动画形式</h3><p>转变器是一种只有起点与终点两个关键帧的限制型关键帧动画过程。起点关键帧描述的是当前DOM的状态，而终点关键帧则是我们提供的一系列变化后的属性、样式和特性。</p>
+<p>在一些情况下，开始的关键帧状态并不是我们想要的情况。譬如<code>red</code>这个字符串会被解释为<code>rgb(255,0,0)</code>。又如，<code>rgba(255,0,0,0)</code>这个颜色，是一个显示为透明的红色。但如果使用RGB的内插器，则会认为是一个<code>rgb(255,0,0)</code>，一个标准的不透明红色。</p>
+<p>这个时候，我们可以自定义起点关键帧的状态。方法一是在创建转变器前定义起点关键帧：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs javascript">d3.<span class="hljs-title function_">select</span>(<span class="hljs-string">&quot;body&quot;</span>)<br>    .<span class="hljs-title function_">style</span>(<span class="hljs-string">&quot;color&quot;</span>, <span class="hljs-string">&quot;green&quot;</span>)<br>    .<span class="hljs-title function_">transition</span>()<br>    .<span class="hljs-title function_">style</span>(<span class="hljs-string">&quot;color&quot;</span>, <span class="hljs-string">&quot;red&quot;</span>);<br></code></pre></td></tr></table></figure>
+
+<p>不过这种方法只是保持属性值是一致的，并没有解决属性值转换的问题。方法二是提供起点状态和终点状态，同时提供一个指定的内插器，保证转换也是一致的：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs javascript">d3.<span class="hljs-title function_">select</span>(<span class="hljs-string">&quot;body&quot;</span>)<br>	.<span class="hljs-title function_">transition</span>()<br>    .<span class="hljs-title function_">styleTween</span>(<span class="hljs-string">&quot;color&quot;</span>, <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) &#123;<br>	    <span class="hljs-keyword">return</span> d3.<span class="hljs-title function_">interpolate</span>(<span class="hljs-string">&quot;green&quot;</span>, <span class="hljs-string">&quot;red&quot;</span>);<br>	&#125;);<br></code></pre></td></tr></table></figure>
+
+<p>transition.styleTween可以自定义一个样式内插器，这个内插器会使用已知的CSS3样式转换语法。</p>
+<hr>
+<h3 id="随时间进行插值"><a href="#随时间进行插值" class="headerlink" title="随时间进行插值"></a>随时间进行插值</h3><p>如果要实现一个圆滑的动画，D3需要知道如何使用插值的方式，从起点状态演变到对应的终点状态。d3.interpolate方法通过推断起点状态与终点状态中每个值对的类型，确定了一个合适的插值器。D3支持以下几种类型：</p>
+<ul>
+<li>数字（numbers）</li>
+<li>颜色（colors）</li>
+<li>几何变换（geometric transforms）</li>
+<li>内嵌数字的字符串（如”96px”）</li>
+</ul>
+<p>字符串插值器会配对起点状态的字符串值和终点状态的字符串值，并分离出数字部分进行插值处理后，再拼凑到非数字部分上完成插值的重建。各种复杂的场景都可以应用，如路径数据<code>&quot;M0,0L20,30&quot;</code>、CSS的字体样式<code>&quot;300 12px/100% Helvetica&quot;</code>。</p>
+<p>不过字符串插值器并不是万能的。如果起点状态的字符串值格式不能跟终点状态的对上，那么就不能分离出数字部分了。这个时候需要重新对状态进行采样或提供更多使两者融合的算法。譬如，生成弧时我们需要使用极坐标的插值器，这样就可以通过角度进行插值，而不是通过点的位置。</p>
+<p>现在回到标题中“随时间“理解。实际上，当我们需要自定义插值器时，被定义的插值器要返回一个以时间t为参数，定义域为[0, 1]的子处理器。这样的一个插值器，当t为0时，返回的是起点状态的值；当t为1时，返回的是终点状态的值；当0&lt;t&lt;1时，返回一个混合值（其实我觉得只要任意定义域里的t，函数都有返回值应该就可以了）</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">function</span> <span class="hljs-title function_">interpolateNumber</span>(<span class="hljs-params">a, b</span>) &#123;<br>  <span class="hljs-keyword">return</span> <span class="hljs-keyword">function</span>(<span class="hljs-params">t</span>) &#123;<br>    <span class="hljs-keyword">return</span> a + t * (b - a);<br>  &#125;;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>有一点需要注意的是，当从0开始插值，或插值到0，会遇到一些很小的数，譬如0.0000001。官方教程中这里说最小值只能到0.000001，原因是0.0000001会被转换为<code>1e－7</code>，而CSS会解析为1。但我测试过，现在的CSS是可以使用<code>1e－8</code>甚至更小。</p>
+<hr>
+<h3 id="有些情况是不能被插值的"><a href="#有些情况是不能被插值的" class="headerlink" title="有些情况是不能被插值的"></a>有些情况是不能被插值的</h3><p>在用选择器改变DOM时，是不能进行插值处理的，也就是说，只能使用转变器演进动画过程。譬如，我们不能对创建元素这个变化进行插值。更深的原因是，设计一个转变器的前提，对象元素必须要是存在的。这样，元素创建这个状态是不能成为起点状态。选择器的相关方法，如数据绑定（data、enter、exit），和元素创建（append、insert），只能通过选择器实现，不能使用转变器实现。</p>
+<p>以下代码会经常用到</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-comment">//绑定数据</span><br><span class="hljs-keyword">var</span> bar = svg.<span class="hljs-title function_">selectAll</span>(<span class="hljs-string">&quot;.bar&quot;</span>)<br>    .<span class="hljs-title function_">data</span>(data, <span class="hljs-keyword">function</span>(<span class="hljs-params">d</span>) &#123; <span class="hljs-keyword">return</span> d.<span class="hljs-property">key</span>; &#125;);<br><br><span class="hljs-comment">//给enter选择器的元素进行初始化</span><br>bar.<span class="hljs-title function_">enter</span>().<span class="hljs-title function_">append</span>(<span class="hljs-string">&quot;rect&quot;</span>)<br>    .<span class="hljs-title function_">attr</span>(<span class="hljs-string">&quot;class&quot;</span>, <span class="hljs-string">&quot;bar&quot;</span>)<br>    <span class="hljs-comment">//…</span><br><br><span class="hljs-comment">//对enter和update选择器的元素设计转变器</span><br>bar.<span class="hljs-title function_">transition</span>()<br><br><span class="hljs-comment">//对exit选择器设计退出的转变器，最后要删除元素</span><br>bar.<span class="hljs-title function_">exit</span>().<span class="hljs-title function_">transition</span>()<br>    <span class="hljs-comment">//…</span><br>    .<span class="hljs-title function_">remove</span>();<br></code></pre></td></tr></table></figure>
+
+<p>为方便起见，针对以上规则有一些例外的情况。如上面代码exit的例子，可以使用transition.remove在转变结束时删除转变的元素。还有就是，transition.text可以在转变开始时设定元素的文本内容。在将来，还可能支持其他不可插值操作，如classed和html。</p>
+<hr>
+<h3 id="转变器的生命周期"><a href="#转变器的生命周期" class="headerlink" title="转变器的生命周期"></a>转变器的生命周期</h3><p>转变器比较棘手的部分是，它会随时间发生而不是马上完成。转变器并不是运行在一条简单的路线上，一旦页面进行加载，就会产生一系列复杂的反复回调。如果我们想在设计时忽略转变器运行过程的复杂性，我们必须理解转变器整个计算过程中的规则。</p>
+<p>转变器有一个四阶段的生命周期：</p>
+<ol>
+<li>调度阶段</li>
+<li>开始阶段</li>
+<li>运行阶段</li>
+<li>结束阶段</li>
+</ol>
+<p>转变器在selection.transition被调用时会进入调度阶段。我们会在这个阶段通过转变器的attr、style和其他转变器方法设置终点关键帧的状态。整个调度过程是发生在代码中，如作为点击某个按钮的响应等等，这意味着这个阶段是同步进行的。这种方式使得更容易调试，更容易根据全局变化的状态配置终点关键帧的状态。</p>
+<p>在调度阶段，我们可以选择性配置一个延迟时间（delay），而我们的开始阶段正是根据我们配置的延迟时间开始的。当没有配置延迟时间时，开始阶段会以最快的方式进入开始阶段。一旦进入开始阶段，start事件会被触发，这时转变器会异步初始化它的子处理器（tween）。这些处理器会分别从DOM中收集起点的状态值和构建插值器。由于在转变器进入开始阶段前，是无法明确知道起点的状态值，因此定义子处理器的初始化工作是很必要的。还要注意的是，我们使用attrTween、styleTween和其他tween方法时，需要设计成在转变器进入开始阶段时可以异步计算的。</p>
+<p>当进入运行阶段，转变器的子处理器会分别以t参数从0到1开始执行。延迟时间（delay）也会影响从调度阶段到运行阶段的时长，而执行时间（duration）的配置则会影响整个运行阶段的时长。利用这两个方法，可以简单地调节转变器的时间流，譬如我们可以实现缓进缓出的效果。所以，整个转变器的时长是延迟时间加上执行时间，一旦到时间就会结束，即进入结束阶段。</p>
+<p>进入结束阶段，这意味着子处理器都执行了t&#x3D;1的情况，并且会触发end事件。</p>
+<hr>
+<h3 id="转变器是针对每个元素，并且是独占的。"><a href="#转变器是针对每个元素，并且是独占的。" class="headerlink" title="转变器是针对每个元素，并且是独占的。"></a>转变器是针对每个元素，并且是独占的。</h3><p>每个元素的转变器都是独立运行的。当我们为一个选择器创建了一个转变器，那是我们为选择器中的每个元素创建了一系列的选择器，而不是为多个元素创建了一个混合转变器。不同的元素可以使用不同的延迟时间和执行时间，甚至可以使用不同的调节和不同的子处理器。另外，转变器中的事件也是分别分发给每个元素的。当某个元素接收到了一个结束事件，那么这个元素的转变会结束，但转变器中的其他元素可能还在运行。</p>
+<p>对于任意一个元素，只能同时运行一个转变器。如果要在这个元素上执行一个新的转变器，那么会停止这个元素上正在运行的转变器。中断一个元素上的转变器运行，不会影响到其他元素，也就是说，多种转变器是可以同时运行在不同的元素上的。在一个转变器在运行同时，可以使用transition.transition安排多个其他的转变器准备执行。</p>
+<p>对于每个元素，转变器队列是个先进先出的结构。当转变器进入调度阶段时，会得到一个自增的id。当元素上一个转变器开始执行，那么只有比这个转变器更新的转变器才能被执行。也就是说，在旧的转变器执行过程中，插入启动其他转变器都会马上取消所有旧队列中的所有转变器，建立新的队列，即使旧队列中的转变器还没进入开始阶段。这种方式消除主动取消转变器的必要。</p>
+<p>类似于数据绑定中，数据会绑定到元素的<code>__data__</code>属性上，转变器也会绑定到元素的<code>__transition__</code>属性上。当转变器进入调度阶段，属性会被创建；当最后调度的转变器执行结束，这个属性就会被删除。在控制台上对这个属性上打上标记，可以有效调试哪个转变器安排在哪个元素。由于转变器是绑定到元素上的，我们可以重新选择元素，修改子处理器和时间流。这个普遍应用在组件驱动的转变器上，譬如坐标轴组件。</p>
+<blockquote>
+<p>Written with <a target="_blank" rel="noopener" href="https://stackedit.io/">StackEdit</a>.</p>
+</blockquote>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/STUDY/">STUDY</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/D3/">D3</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2015/03/19/2015-03-19-d3-path-transitions/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">D3路径动画</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2015/02/01/2015-02-01-d3-object-constancy/">
+                        <span class="hidden-mobile">D3对象连贯性教程里的知识点</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>

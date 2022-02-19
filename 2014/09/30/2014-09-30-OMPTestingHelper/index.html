@@ -1,0 +1,520 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Ghold Lo">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="入口（index.js）包含服务、路由初始化，路由映射等  http服务（server.js）建立http服务，按照路由映射发送请求  路由（route.js）按照请求内容分配    请求处理（requestHandlers.js）实现查询逻辑  show*：show*的作用是建立请求的页面，包含请求使用的form元素，加上外部的ajax调用，实现工具数据输入 query*或get*：query*">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OMPTestingHelper介绍">
+<meta property="og:url" content="http://ghold.net/2014/09/30/2014-09-30-OMPTestingHelper/index.html">
+<meta property="og:site_name" content="Welcome|Ghold&#39;s Programming Version">
+<meta property="og:description" content="入口（index.js）包含服务、路由初始化，路由映射等  http服务（server.js）建立http服务，按照路由映射发送请求  路由（route.js）按照请求内容分配    请求处理（requestHandlers.js）实现查询逻辑  show*：show*的作用是建立请求的页面，包含请求使用的form元素，加上外部的ajax调用，实现工具数据输入 query*或get*：query*">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2014-09-30T02:00:00.000Z">
+<meta property="article:modified_time" content="2022-02-19T07:40:08.938Z">
+<meta property="article:author" content="Ghold Lo">
+<meta property="article:tag" content="NODEJS">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome/css/font-awesome.min.css"><script src="https://cdn.jsdelivr.net/gh/Gholdnet01/live2d-widget@latest/autoload.js"></script>
+  
+  <title>OMPTestingHelper介绍 - Welcome|Ghold&#39;s Programming Version</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"ghold.net","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 6.0.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>物欲退散</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="OMPTestingHelper介绍">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2014-09-30 10:00" pubdate>
+        2014年9月30日 上午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      3.8k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      32 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">OMPTestingHelper介绍</h1>
+            
+            <div class="markdown-body">
+              <h4 id="入口（index-js）"><a href="#入口（index-js）" class="headerlink" title="入口（index.js）"></a><strong>入口（index.js）</strong></h4><p>包含服务、路由初始化，路由映射等</p>
+<hr>
+<h4 id="http服务（server-js）"><a href="#http服务（server-js）" class="headerlink" title="http服务（server.js）"></a><strong>http服务（server.js）</strong></h4><p>建立http服务，按照路由映射发送请求</p>
+<hr>
+<h4 id="路由（route-js）"><a href="#路由（route-js）" class="headerlink" title="路由（route.js）"></a><strong>路由（route.js）</strong></h4><p>按照请求内容分配</p>
+<!-- excerpt -->
+
+<hr>
+<h4 id="请求处理（requestHandlers-js）"><a href="#请求处理（requestHandlers-js）" class="headerlink" title="请求处理（requestHandlers.js）"></a><strong>请求处理（requestHandlers.js）</strong></h4><p>实现查询逻辑</p>
+<ul>
+<li><code>show*</code>：<code>show*</code>的作用是建立请求的页面，包含请求使用的form元素，加上外部的ajax调用，实现工具数据输入</li>
+<li><code>query*</code>或<code>get*</code>：<code>query*</code>或<code>get*</code>的作用是对查询服务器进行请求并接收返回值。调用<code>query*</code>或<code>get*</code>的方法只能通过<code>show*</code>中ajax调用</li>
+<li><code>static</code>：静态文件下载请求使用</li>
+</ul>
+<hr>
+<h4 id="生成器（generator-js）"><a href="#生成器（generator-js）" class="headerlink" title="生成器（generator.js）"></a><strong>生成器（generator.js）</strong></h4><p>生成器与之后描述的过滤器均属于解析、可视化服务器返回Json的方法。</p>
+<ul>
+<li><code>txt_gen</code>：生成txt文件用。实际使用可以提供自动化测试结果下载</li>
+<li><code>html_gen</code>：生成html展示用。</li>
+</ul>
+<p>提供四种最外层数据结构的Json进行解析，其余情况不解释</p>
+<ul>
+<li>list：需要解析的内容是列表形式</li>
+<li>single：最普通的结构</li>
+<li>map：需要解析的内容如{1:{key1:value1},2:{key2:value2}}</li>
+<li>nofield：无字段形式，内容只有一个值的情况</li>
+</ul>
+<hr>
+<h4 id="过滤器（filter-js）"><a href="#过滤器（filter-js）" class="headerlink" title="过滤器（filter.js）"></a><strong>过滤器（filter.js）</strong></h4><p>过滤器用于增强生成器的解析能力，通过生成器与过滤器递归调用使用。</p>
+<ul>
+<li><code>datetime</code>：日期时间，把时间格式化为”YYYY-MM-DD HH:mm:ss”</li>
+<li><code>date</code>：日期，把时间格式化为”YYYY-MM-DD”</li>
+<li><code>txt_*</code>：把对应格式转换为规定的文本格式</li>
+<li><code>html_*</code>：把对应格式转换为规定的html格式</li>
+<li><code>str_list</code>：对字符串列表进行加工</li>
+<li><code>time_list</code>：对时间列表进行加工</li>
+<li><code>html_warp</code>：对过长的字符串列表按逗号进行截取，分行显示</li>
+</ul>
+<hr>
+<h4 id="配置文件（config-x2F-default-json）"><a href="#配置文件（config-x2F-default-json）" class="headerlink" title="配置文件（config&#x2F;default.json）"></a><strong>配置文件（config&#x2F;default.json）</strong></h4><p>default.json记录了工具展示数据的结构，可以实现增量扩展。</p>
+<p>这个文件分为三部分，static、store和routeinterface。</p>
+<p>static部分是用于请求处理里<code>static</code>方法的配置，后缀与接收格式的关系。</p>
+<p>store部分是提供展示的结构，用于解析和展示返回的Json。此配置的格式为：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></div></td><td class="code"><pre><code class="hljs json"><span class="hljs-attr">&quot;store&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;store_name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;cn_name&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;中文名称&quot;</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;group&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;分组名称&quot;</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;txt&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-punctuation">[</span><br>      <span class="hljs-punctuation">&#123;</span><br>        <span class="hljs-attr">&quot;field&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-punctuation">&#123;</span><br>          <span class="hljs-attr">&quot;field1&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;字段1显示名&quot;</span><span class="hljs-punctuation">,</span><br>					……<br>				<span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>				<span class="hljs-attr">&quot;filter&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-punctuation">&#123;</span><br>					<span class="hljs-attr">&quot;field1&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;字段1过滤&quot;</span><span class="hljs-punctuation">,</span><br>					……<br>				<span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>				<span class="hljs-attr">&quot;child_field&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-punctuation">&#123;</span><br>					<span class="hljs-attr">&quot;child_field1&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;子字段1显示名&quot;</span><span class="hljs-punctuation">,</span><br>					……<br>				<span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>				<span class="hljs-attr">&quot;child_filter&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-punctuation">&#123;</span><br>					<span class="hljs-attr">&quot;child_filter&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;子字段1过滤&quot;</span><span class="hljs-punctuation">,</span><br>					……<br>				<span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>				<span class="hljs-attr">&quot;dir&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;生成文件存放位置&quot;</span><span class="hljs-punctuation">,</span><br>				<span class="hljs-attr">&quot;type&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;txt生产器数据类型&quot;</span><span class="hljs-punctuation">,</span><br>				<span class="hljs-attr">&quot;content&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;需要转换的内容段&quot;</span><br>			<span class="hljs-punctuation">&#125;</span><br>		<span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span><br>		<span class="hljs-attr">&quot;content_type&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;html生产器数据类型&quot;</span><span class="hljs-punctuation">,</span><br>		<span class="hljs-attr">&quot;html&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-punctuation">&#123;</span><br>			<span class="hljs-attr">&quot;field&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-punctuation">&#123;</span><br>				<span class="hljs-attr">&quot;field1&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;字段1显示名&quot;</span><span class="hljs-punctuation">,</span><br>				……<br>			<span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>			<span class="hljs-attr">&quot;filter&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-punctuation">&#123;</span><br>				<span class="hljs-attr">&quot;field1&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;字段1过滤&quot;</span><span class="hljs-punctuation">,</span><br>				……<br>			<span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>			<span class="hljs-attr">&quot;child_field&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-punctuation">&#123;</span><br>				<span class="hljs-attr">&quot;child_field1&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;子字段1显示名&quot;</span><span class="hljs-punctuation">,</span><br>				……<br>			<span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>			<span class="hljs-attr">&quot;child_filter&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-punctuation">&#123;</span><br>				<span class="hljs-attr">&quot;child_filter&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;子字段1过滤&quot;</span><span class="hljs-punctuation">,</span><br>				……<br>			<span class="hljs-punctuation">&#125;</span><br>		<span class="hljs-punctuation">&#125;</span><br>	<span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<p>配置说明：</p>
+<ul>
+<li>如果不需要生产txt，<code>&quot;txt&quot;</code>可以不用配置；</li>
+<li><code>&quot;txt&quot;</code>是一个列表，可以接受多个文件生成，以满足多种结构的数据验证</li>
+<li><code>&quot;filter&quot;</code>、<code>&quot;child_field&quot;</code>、<code>&quot;child_filter&quot;</code>均是可选填</li>
+<li><code>&quot;content&quot;</code>选填，用于解析子一级Json；默认不配置就是解析整个Json对象</li>
+<li><code>&quot;content_type&quot;</code>字段描述的是，用于产生html的解析结构</li>
+<li><code>&quot;txt&quot;</code>的<code>&quot;type&quot;</code>字段描述的是，用于产生txt文件的解析结构。为什么要独立于<code>&quot;content_type&quot;</code>设定txt的解析结构？原因有二：<code>&quot;content&quot;</code>可以自定义局部使用整个Json对象的子级（如<code>&quot;parent&quot;:&#123;&quot;child_1&quot;:&#123;&#125;,&quot;child_2&quot;:&#123;&#125;&#125;</code>，可以配置<code>&quot;content&quot;</code>的值为<code>&quot;child_1&quot;</code>，这样就可以局部解析<code>&quot;child_1&quot;</code>），而子级一般对母级结构不一样；<code>&quot;txt&quot;</code>是一个独立的生成应用，需要各自设定</li>
+</ul>
+<p>routeinterface部分提供内部静态路由接口查询功能。基本配置：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-attr">&quot;routeinterface&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-punctuation">&#123;</span><br>	<span class="hljs-attr">&quot;interfaceName2&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-punctuation">&#123;</span><br>		<span class="hljs-attr">&quot;name&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;接口名称&quot;</span><span class="hljs-punctuation">,</span><br>		<span class="hljs-attr">&quot;group&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;分组名称&quot;</span><span class="hljs-punctuation">,</span><br>		<span class="hljs-attr">&quot;args&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-punctuation">&#123;</span><br>			<span class="hljs-attr">&quot;arg_1&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-punctuation">&#123;</span><br>				<span class="hljs-attr">&quot;name&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;参数名1&quot;</span><span class="hljs-punctuation">,</span><br>				<span class="hljs-attr">&quot;type&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;参数录入类型&quot;</span><br>			<span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>			<span class="hljs-attr">&quot;arg_1&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-punctuation">&#123;</span><br>				<span class="hljs-attr">&quot;name&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;参数名1&quot;</span><span class="hljs-punctuation">,</span><br>				<span class="hljs-attr">&quot;type&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;参数录入类型&quot;</span><br>			<span class="hljs-punctuation">&#125;</span><br>		<span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>		<span class="hljs-attr">&quot;content_type&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;list&quot;</span><span class="hljs-punctuation">,</span><br>		<span class="hljs-attr">&quot;html&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-punctuation">&#123;</span><br>			<span class="hljs-attr">&quot;field&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-punctuation">&#123;</span><br>				<span class="hljs-attr">&quot;field1&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;字段1显示名&quot;</span><span class="hljs-punctuation">,</span><br>				……<br>			<span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>			<span class="hljs-attr">&quot;filter&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-punctuation">&#123;</span><br>				<span class="hljs-attr">&quot;field1&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;字段1过滤&quot;</span><span class="hljs-punctuation">,</span><br>				……<br>			<span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>			<span class="hljs-attr">&quot;child_field&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-punctuation">&#123;</span><br>				<span class="hljs-attr">&quot;child_field1&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;子字段1显示名&quot;</span><span class="hljs-punctuation">,</span><br>				……<br>			<span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>			<span class="hljs-attr">&quot;child_filter&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-punctuation">&#123;</span><br>				<span class="hljs-attr">&quot;child_filter&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;子字段1过滤&quot;</span><span class="hljs-punctuation">,</span><br>				……<br>			<span class="hljs-punctuation">&#125;</span><br>		<span class="hljs-punctuation">&#125;</span><br>	<span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<p>配置说明：</p>
+<ul>
+<li>routeinterface需要严格配置，也需要服务端的支持</li>
+<li><code>&quot;name&quot;</code>字段严格按照接口方法去掉get或find后剩下的部分，加上参数个数合成（参数个数超过10则用9），如getBatch有两个参数，则名称为Batch2</li>
+<li><code>&quot;args&quot;</code>字段负责查询参数form格式配置，其中<code>&quot;type&quot;</code>有3种类型：<br>*    <code>&quot;text&quot;</code>：字符串格式<br>*    <code>&quot;datetime&quot;</code>：日期时间格式<br>*    <code>&quot;select&quot;</code>：下拉选项，需要配置<code>&quot;option&quot;</code></li>
+<li>其他html生成参考store配置说明</li>
+</ul>
+<blockquote>
+<p>Written with <a target="_blank" rel="noopener" href="https://stackedit.io/">StackEdit</a>.</p>
+</blockquote>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/PROJECT/">PROJECT</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/NODEJS/">NODEJS</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2015/01/09/2015-01-09-d3-binding-data-ex/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">D3选择器原理及数据绑定练习</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2014/08/21/2014-08-21-three-little-circles-tutorial-bug/">
+                        <span class="hidden-mobile">Three Little Circles教程缺陷</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>

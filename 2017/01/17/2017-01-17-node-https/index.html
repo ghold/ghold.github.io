@@ -1,0 +1,495 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Ghold Lo">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="这个是16年年末时做的一项工作。随着苹果公司宣布在2017年后上架其商店的App，内部不得含有不安全的协议调用，换句话说，提供给app的接口调用，如http这样的，都必须使用安全的https协议。 https具体的概念，可以通过维基百科自行查询。本文主要介绍如何在node.js服务器上部署免费的https证书。关于本文用到的Let’s Encrypt证书签发服务，具体介绍可以在其官网上看。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="node服务器部署https">
+<meta property="og:url" content="http://ghold.net/2017/01/17/2017-01-17-node-https/index.html">
+<meta property="og:site_name" content="Welcome|Ghold&#39;s Programming Version">
+<meta property="og:description" content="这个是16年年末时做的一项工作。随着苹果公司宣布在2017年后上架其商店的App，内部不得含有不安全的协议调用，换句话说，提供给app的接口调用，如http这样的，都必须使用安全的https协议。 https具体的概念，可以通过维基百科自行查询。本文主要介绍如何在node.js服务器上部署免费的https证书。关于本文用到的Let’s Encrypt证书签发服务，具体介绍可以在其官网上看。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2017-01-17T02:00:00.000Z">
+<meta property="article:modified_time" content="2022-02-19T07:38:03.665Z">
+<meta property="article:author" content="Ghold Lo">
+<meta property="article:tag" content="NODEJS HTTPS">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome/css/font-awesome.min.css"><script src="https://cdn.jsdelivr.net/gh/Gholdnet01/live2d-widget@latest/autoload.js"></script>
+  
+  <title>node服务器部署https - Welcome|Ghold&#39;s Programming Version</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"ghold.net","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 6.0.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>物欲退散</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="node服务器部署https">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2017-01-17 10:00" pubdate>
+        2017年1月17日 上午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      3.1k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      27 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">node服务器部署https</h1>
+            
+            <div class="markdown-body">
+              <p>这个是16年年末时做的一项工作。随着苹果公司宣布在2017年后上架其商店的App，内部不得含有不安全的协议调用，换句话说，提供给app的接口调用，如http这样的，都必须使用安全的https协议。</p>
+<p>https具体的概念，可以通过维基百科自行查询。本文主要介绍如何在node.js服务器上部署免费的https证书。关于本文用到的Let’s Encrypt证书签发服务，具体介绍可以在其官网上看。</p>
+<!-- excerpt -->
+
+<hr>
+<h3 id="服务器私钥"><a href="#服务器私钥" class="headerlink" title="服务器私钥"></a>服务器私钥</h3><p>Let’s Encrypt服务需要在远程验证域名服务器的真实性，才会颁发证书。服务器需要提供唯一识别的密钥进行识别操作。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><pre><code class="hljs shell">openssl genrsa -out ca-key.pem -des 4096<br></code></pre></td></tr></table></figure>
+
+<p>这个操作为我们创建一个验证私钥，这时，这个私钥将会代表这台服务器对服务验证进行加密。创建时带-des，openssl要求填写密码。加密后，我们使用这个验证私钥验证证书时，都要输入密码。如果未来需要自动化更新证书有效期，为了简单，可以不设密码，去掉-des参数即可。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">openssl genrsa -out server-key.pem 4096<br></code></pre></td></tr></table></figure>
+
+<p>这次的操作与上一次雷同，区别在于这次的私钥将会用于产生服务公钥。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">openssl req -new -key server-key.pem -config openssl.cnf -out server-csr.pem<br></code></pre></td></tr></table></figure>
+
+<p>在执行这个命令之前，我们要在当前目录创建一个配置文件，内容大概是域名主体信息，包括主体所在国家地区、所属公司组织或机构：</p>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><code class="hljs properties"><span class="hljs-attr">[req]</span><br>  <span class="hljs-attr">distinguished_name</span> = <span class="hljs-string">req_distinguished_name</span><br>  <span class="hljs-attr">req_extensions</span> = <span class="hljs-string">v3_req</span><br><br>  <span class="hljs-attr">[req_distinguished_name]</span><br>  <span class="hljs-attr">countryName</span> = <span class="hljs-string">Country Name (2 letter code)  </span><br>  <span class="hljs-attr">countryName_default</span> = <span class="hljs-string">CN  </span><br>  <span class="hljs-attr">stateOrProvinceName</span> = <span class="hljs-string">State or Province Name (full name)  </span><br>  <span class="hljs-attr">stateOrProvinceName_default</span> = <span class="hljs-string">Guangdong</span><br>  <span class="hljs-attr">localityName</span> = <span class="hljs-string">Locality Name (eg, city)  </span><br>  <span class="hljs-attr">localityName_default</span> = <span class="hljs-string">Guangzhou</span><br>  <span class="hljs-attr">organizationName</span> = <span class="hljs-string">Organization Name (eg, company)</span><br>  <span class="hljs-attr">organizationName_default</span> = <span class="hljs-string">Ghost Ltd.</span><br>  <span class="hljs-attr">organizationalUnitName</span>  = <span class="hljs-string">Organizational Unit Name (eg, section)  </span><br>  <span class="hljs-attr">organizationalUnitName_default</span> = <span class="hljs-string">Daily Task Project</span><br>  <span class="hljs-attr">commonName</span> = <span class="hljs-string">Common Name (e.g. server FQDN or YOUR name)</span><br>  <span class="hljs-attr">commonName_default</span> = <span class="hljs-string">ghold.bid</span><br>  <span class="hljs-attr">commonName_max</span>  = <span class="hljs-string">64</span><br>  <span class="hljs-attr">email</span> = <span class="hljs-string">Email Address</span><br>  <span class="hljs-attr">email_default</span> = <span class="hljs-string">gholdnet@gmail.com</span><br><br>  <span class="hljs-attr">[v3_req]</span>  <span class="hljs-string"></span><br><span class="hljs-comment">  # Extensions to add to a certificate request  </span><br>  <span class="hljs-attr">basicConstraints</span> = <span class="hljs-string">CA:FALSE  </span><br>  <span class="hljs-attr">keyUsage</span> = <span class="hljs-string">nonRepudiation, digitalSignature, keyEncipherment  </span><br>  <span class="hljs-attr">subjectAltName</span> = <span class="hljs-string">@alt_names  </span><br><br>  <span class="hljs-attr">[alt_names]</span>  <span class="hljs-string"></span><br><span class="hljs-comment">  # 注意这个设置，配置的域名将会被Let&#x27;s Encrypt服务逐个验证</span><br>  <span class="hljs-attr">DNS.1</span> = <span class="hljs-string">www.ghold.bid</span><br>  <span class="hljs-attr">DNS.2</span> = <span class="hljs-string">ghold.bid</span><br></code></pre></td></tr></table></figure>
+
+<p>域名如需提供更多信息，可以找到<a target="_blank" rel="noopener" href="http://web.mit.edu/crypto/openssl.cnf">配置模板</a>。</p>
+<p>执行命令的结果是输出服务器公钥。有了<code>ca-key.pem</code>和<code>server-csr.pem</code>，执行Let’s Encrypt服务的第一步算是完成。</p>
+<hr>
+<h3 id="启动一个http服务用于验证"><a href="#启动一个http服务用于验证" class="headerlink" title="启动一个http服务用于验证"></a>启动一个http服务用于验证</h3><p>Let’s Encrypt服务证书签发协议使用ACME协议，即通过脚本生成验证文件到固定目录下，通过http的方式本地下载校验一次，通过http的方式远程下载校验一次。因此，我们必须要在指定的目录启动的http服务。即使在以后自动化更新证书有效期，也是需要启动http服务，要么就一直不关闭。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">wget https://raw.githubusercontent.com/diafygi/acme-tiny/master/acme_tiny.py<br></code></pre></td></tr></table></figure>
+
+<p>先从脚本文件<code>acme_tiny.py</code>分析一下。这个脚本来自于<a target="_blank" rel="noopener" href="https://github.com/diafygi/acme-tiny">Github</a>，为验证服务提供了整套流程，大大提高了部署效率。启动http服务的目标是为脚本提供临时验证文件的获取。在脚本中我们可以看到带有<code>.well-known/acme-challenge/</code>的目录。这个目录是不可以更改的，而且启动的http服务中必须包含这个目录路径。目的是可以通过<code>http://host/.well-known/acme-challenge/</code>下载到验证文件。还有一点是，端口必须是80端口。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">python -m SimpleHTTPServer 80 # root user exec, python 2<br>python -m http.server 80 # root user exec, python 3<br></code></pre></td></tr></table></figure>
+
+<p>如果要使用80端口，就要求我们拥有root的权限去启动这一步http服务。要么就是使用端口代理的方式，不过前提也是需要root配置代理，区别不大。</p>
+<hr>
+<h3 id="执行验证，生成签名，合成证书"><a href="#执行验证，生成签名，合成证书" class="headerlink" title="执行验证，生成签名，合成证书"></a>执行验证，生成签名，合成证书</h3><p>一切准备完毕后，就可以执行<code>acme_tiny.py </code>脚本生成签名。执行的代码在脚本注释里有写到：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">python acme_tiny.py --account-key ./ca-key.pem --csr ./server-csr.pem \<br>--acme-dir /path/to/.well-known/acme-challenge/ &gt; signed.crt<br></code></pre></td></tr></table></figure>
+
+<p>生成<code>signed.crt</code>后，接下来是下载Let’s Encrypt服务提供的顶级证书，并加以合成。此步骤说明参看参考文档<sup id="fnref:1" class="footnote-ref"><a href="#fn:1" rel="footnote"><span class="hint--top hint--rounded" aria-label="Let’s Encrypt，免费好用的 HTTPS 证书
+">[1]</span></a></sup></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">wget -O - https://letsencrypt.org/certs/lets-encrypt-x3-cross-signed.pem &gt; intermediate.pem<br>cat signed.crt intermediate.pem &gt; chained.pem<br></code></pre></td></tr></table></figure>
+
+<p>一般来说，使用node部署https需要的证书到这步即可。如果要执意使用OCSP Stapling请自行研究。</p>
+<hr>
+<h3 id="node部署与自动化更新"><a href="#node部署与自动化更新" class="headerlink" title="node部署与自动化更新"></a>node部署与自动化更新</h3><p><sup id="fnref:2" class="footnote-ref"><a href="#fn:2" rel="footnote"><span class="hint--top hint--rounded" aria-label="用Node.js创建自签名的HTTPS服务器
+">[2]</span></a></sup>在node启动时，加入</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">let</span> options = &#123;<br>   <span class="hljs-attr">key</span>: fs.<span class="hljs-title function_">readFileSync</span>(<span class="hljs-string">&#x27;path/to/server-key.pem&#x27;</span>),<br>   <span class="hljs-attr">cert</span>: fs.<span class="hljs-title function_">readFileSync</span>(<span class="hljs-string">&#x27;path/to/chained.pem&#x27;</span>),<br>&#125;;<br>https.<span class="hljs-title function_">createServer</span>(options, app).<span class="hljs-title function_">listen</span>(settings.<span class="hljs-property">server_https_port</span>); <span class="hljs-comment">// 默认443</span><br></code></pre></td></tr></table></figure>
+
+<p>由于大部分入口都会信任Let’s Encrypt提供的顶级证书，所以在浏览器上访问会自动安装我们的证书，从而不需要在使用api时做配置。</p>
+<p><code>acme_tiny.py</code>中也提供了crontab定时任务方案，可以简单做点自动化更新证书，最后记得把证书放对位置，重启服务即可。</p>
+<blockquote>
+<p>参考文档：</p>
+</blockquote>
+<section class="footnotes"><div class="footnote-list"><ol><li><span id="fn:1" class="footnote-text"><span><a target="_blank" rel="noopener" href="https://imququ.com/post/letsencrypt-certificate.html">Let’s Encrypt，免费好用的 HTTPS 证书</a>
+<a href="#fnref:1" rev="footnote" class="footnote-backref"> ↩</a></span></span></li><li><span id="fn:2" class="footnote-text"><span><a target="_blank" rel="noopener" href="https://cnodejs.org/topic/54745ac22804a0997d38b32d">用Node.js创建自签名的HTTPS服务器</a>
+<a href="#fnref:2" rev="footnote" class="footnote-backref"> ↩</a></span></span></li></ol></div></section>
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/TECHNIQUE/">TECHNIQUE</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/NODEJS-HTTPS/">NODEJS HTTPS</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2015/04/19/2015-04-19-thrift-experience/">
+                        <span class="hidden-mobile">Thrift实战两则</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>

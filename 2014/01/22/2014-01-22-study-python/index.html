@@ -1,0 +1,874 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Ghold Lo">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="一篇之前学习Python的笔记，感谢《笨办法学Python》的作者。本文是结合《笨办法学Python》和Python3.3的一些补充。 Ex01 print后要加括号（python3.3）  Ex02 #号起注释作用  Ex03 整型运算结果一般为整型，除法结果则为浮点型  Ex04 print参数连接打印时，自动插入空格    Ex05 print中多个参数格式化时，参数以元组形式传入  Ex0">
+<meta property="og:type" content="article">
+<meta property="og:title" content="笨办法学python笔记">
+<meta property="og:url" content="http://ghold.net/2014/01/22/2014-01-22-study-python/index.html">
+<meta property="og:site_name" content="Welcome|Ghold&#39;s Programming Version">
+<meta property="og:description" content="一篇之前学习Python的笔记，感谢《笨办法学Python》的作者。本文是结合《笨办法学Python》和Python3.3的一些补充。 Ex01 print后要加括号（python3.3）  Ex02 #号起注释作用  Ex03 整型运算结果一般为整型，除法结果则为浮点型  Ex04 print参数连接打印时，自动插入空格    Ex05 print中多个参数格式化时，参数以元组形式传入  Ex0">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2014-01-22T02:00:00.000Z">
+<meta property="article:modified_time" content="2022-02-19T07:41:07.777Z">
+<meta property="article:author" content="Ghold Lo">
+<meta property="article:tag" content="PYTHON">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome/css/font-awesome.min.css"><script src="https://cdn.jsdelivr.net/gh/Gholdnet01/live2d-widget@latest/autoload.js"></script>
+  
+  <title>笨办法学python笔记 - Welcome|Ghold&#39;s Programming Version</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"ghold.net","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 6.0.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>物欲退散</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="笨办法学python笔记">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2014-01-22 10:00" pubdate>
+        2014年1月22日 上午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      8.1k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      68 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">笨办法学python笔记</h1>
+            
+            <div class="markdown-body">
+              <p>一篇之前学习Python的笔记，感谢《笨办法学Python》的作者。本文是结合《笨办法学Python》和Python3.3的一些补充。</p>
+<h4 id="Ex01"><a href="#Ex01" class="headerlink" title="Ex01"></a>Ex01</h4><ol>
+<li><code>print</code>后要加括号（python3.3）</li>
+</ol>
+<h4 id="Ex02"><a href="#Ex02" class="headerlink" title="Ex02"></a>Ex02</h4><ol>
+<li><code>#</code>号起注释作用</li>
+</ol>
+<h4 id="Ex03"><a href="#Ex03" class="headerlink" title="Ex03"></a>Ex03</h4><ol>
+<li>整型运算结果一般为整型，除法结果则为浮点型</li>
+</ol>
+<h4 id="Ex04"><a href="#Ex04" class="headerlink" title="Ex04"></a>Ex04</h4><ol>
+<li><code>print</code>参数连接打印时，自动插入空格</li>
+</ol>
+<!-- excerpt -->
+
+<h4 id="Ex05"><a href="#Ex05" class="headerlink" title="Ex05"></a>Ex05</h4><ol>
+<li><code>print</code>中多个参数格式化时，参数以元组形式传入</li>
+</ol>
+<h4 id="Ex06"><a href="#Ex06" class="headerlink" title="Ex06"></a>Ex06</h4><ol>
+<li><code>%r</code>格式化方式取的是参数的原始数据，字符串参数自动增加单引号或双引号</li>
+</ol>
+<h4 id="Ex10"><a href="#Ex10" class="headerlink" title="Ex10"></a>Ex10</h4><ol>
+<li><code>%r</code>用作debug，<code>%s</code>用作显示</li>
+<li>反斜杆<code>\</code>用作转义，斜杆<code>/</code>没有意义</li>
+<li><code>&#39;&#39;&#39;</code>（三个单引）与<code>&quot;&quot;&quot;</code>（三个双引）作用一致</li>
+</ol>
+<h4 id="Ex11"><a href="#Ex11" class="headerlink" title="Ex11"></a>Ex11</h4><ol>
+<li>3.3中，<code>input()</code>已经替换掉<code>raw_input()</code></li>
+<li>3.3中，<code>print()</code>输出不换行，需要加第二参数<code>end=&#39;&#39;</code>（双单引号）</li>
+</ol>
+<h4 id="Ex16"><a href="#Ex16" class="headerlink" title="Ex16"></a>Ex16</h4><ol>
+<li>文件操作可能用到的方法：<code>open</code>，<code>read</code>，<code>truncate</code>，<code>readline</code>，<code>write(buff)</code>，<code>close</code></li>
+<li><code>open</code>打开文件方式：</li>
+</ol>
+<ul>
+<li><code>&#39;r&#39;</code>：默认打开方式，只读</li>
+<li><code>&#39;w&#39;</code>：先清空文件，只写</li>
+<li><code>&#39;x&#39;</code>：新建一个文件，只写。已存在文件会报错</li>
+<li><code>&#39;a&#39;</code>：追加，在已有文件后进行写操作。只写</li>
+<li><code>&#39;b&#39;</code>：二进制模式</li>
+<li><code>&#39;t&#39;</code>：文本模式</li>
+<li><code>&#39;+&#39;</code>：权限升级，拥有读和写操作。但必须至少有<code>&#39;w&#39;&#39;r&#39;&#39;x&#39;&#39;a&#39;</code>其中一项</li>
+</ul>
+<h4 id="Ex18"><a href="#Ex18" class="headerlink" title="Ex18"></a>Ex18</h4><ol>
+<li>使用<code>def</code>建立函数</li>
+<li>函数名由字母，数字和下划线<code>_</code>组成，但数字不能首位</li>
+<li>定义或使用函数时必须带括号，定义时参数可有可无，但使用时必须按照定义时的参数进行配置。参数以逗号隔开</li>
+<li>定义函数后要加上冒号才能进入函数体</li>
+<li>函数体要向由缩进4个空格字符，结束函数体时要取消缩进</li>
+<li>运行函数(<code>run</code>)、调用函数(<code>call</code>)、和 使用函数(<code>use</code>)是同一个意思</li>
+</ol>
+<h4 id="Ex19"><a href="#Ex19" class="headerlink" title="Ex19"></a>Ex19</h4><ol>
+<li><code>int()</code>可以强制转换字符串为整型</li>
+</ol>
+<h4 id="Ex24"><a href="#Ex24" class="headerlink" title="Ex24"></a>Ex24</h4><ol>
+<li>函数可以返回多个结果组成的元组</li>
+</ol>
+<h4 id="Ex25"><a href="#Ex25" class="headerlink" title="Ex25"></a>Ex25</h4><ol>
+<li>通过<code>import</code>可以加载py后缀的文件（模块），从而通过<code>.</code>调用模块中定义的函数</li>
+<li>在定义函数后第一行中设置<code>&quot;&quot;&quot;xxx&quot;&quot;&quot;</code>的注释，可用于<code>help()</code>查询</li>
+</ol>
+<h4 id="Ex27"><a href="#Ex27" class="headerlink" title="Ex27"></a>Ex27</h4><ol>
+<li>逻辑运算符</li>
+</ol>
+<ul>
+<li><code>and</code> 与</li>
+<li><code>or</code> 或</li>
+<li><code>not</code> 非</li>
+<li><code>!=</code> 不等于</li>
+<li><code>==</code> 等于</li>
+<li><code>&gt;=</code> 大于等于</li>
+<li><code>&lt;=</code> 小于等于</li>
+<li><code>True</code> 真</li>
+<li><code>False</code> 假</li>
+</ul>
+<h4 id="Ex30"><a href="#Ex30" class="headerlink" title="Ex30"></a>Ex30</h4><ol>
+<li>只要一行以冒号<code>:</code>结尾，它接下来的内容就应该有缩进</li>
+<li>4个空格的缩进表示新的代码区段创建</li>
+</ol>
+<h4 id="Ex32"><a href="#Ex32" class="headerlink" title="Ex32"></a>Ex32</h4><ol>
+<li><code>range()</code>会产生一个<code>range</code>对象，可迭代。<code>range</code>函数会从第一个数到最后一个，但不包含最后一个数字。<code>range(0,5)</code>就是一个带有<code>0,1,2,3,4</code>的<code>range</code>对象</li>
+<li>for-loop的格式是<code>for xxx in yyy:</code>其中<code>yyy</code>是可迭代对象</li>
+<li>列表<code>list</code>有以下方法：</li>
+</ol>
+<ul>
+<li><code>append</code>：追加，可理解成在最后位置插入</li>
+<li><code>clear</code>：清空，清除所有列表内容</li>
+<li><code>copy</code>：复制，复制一个列表副本（新的内存）</li>
+<li><code>count</code>：数目，列表元素个数</li>
+<li><code>extend</code>：扩展，可以从别的可迭代对象中获取元素扩展自身列表</li>
+<li><code>index</code>：索引，列表元素索引</li>
+<li><code>insert</code>：插入，根据 给定的位置进行插入元素</li>
+<li><code>pop</code>：提取，会从列表中删除指定位置元素，调用时会返回该元素。没有参数时默认后进先出</li>
+<li><code>remove</code>：移除，删除第一次出现该值的元素</li>
+<li><code>reverse</code>：倒序，对列表进行倒序处理</li>
+<li><code>sort</code>：排序，对序列进行排序</li>
+</ul>
+<h4 id="Ex33"><a href="#Ex33" class="headerlink" title="Ex33"></a>Ex33</h4><ol>
+<li>尽量少用while-loop，大部分时候for-loop是更好的选择</li>
+<li>重复检查你的<code>while</code>语句，确定你测试的布尔表达式最终会变成<code>False</code></li>
+<li>while-loop的格式为<code>while xxx :</code>当满足<code>xxx</code>为<code>True</code>时开始，<code>xxx</code>为<code>False</code>时停止</li>
+</ol>
+<h4 id="Ex37"><a href="#Ex37" class="headerlink" title="Ex37"></a>Ex37</h4><ol>
+<li>关键字学习</li>
+</ol>
+<ul>
+<li><code>and</code>：逻辑运算符，与</li>
+<li><code>del</code>：删除变量，包括命名和值</li>
+<li><code>from</code>：加载模块使用，与<code>import</code>一起，从<code>xxx</code>导入<code>yyy</code></li>
+<li><code>not</code>：逻辑运算符，非</li>
+<li><code>while</code>：while-loop核心，<code>True</code>时运行循环体，<code>False</code>时退出循环</li>
+<li><code>as</code>：别名，指向。如在<code>import</code>后时，用作导入模块的别名；用在<code>with</code>后时，可以指代<code>with</code>后的with_item，并在<code>with</code>内部使用</li>
+<li><code>elif</code>：否则如果，<code>if</code>语句的带条件分支。</li>
+<li><code>global</code>：定义全局变量</li>
+<li><code>or</code>：逻辑运算符，或</li>
+<li><code>with</code>：通过把<code>xxx</code>替换为<code>yyy</code>，执行下面的代码</li>
+<li><code>assert</code>：测试用，测试表达式1，如果为<code>False</code>，抛出异常并执行表达式2</li>
+<li><code>else</code>：否则，<code>if</code>语句的不带条件分支，后不能再接<code>if</code>的分支</li>
+<li><code>if</code>：条件语句</li>
+<li><code>pass</code>：空语句，跳过，保持结构完整性</li>
+<li><code>yield</code>：量产，可以根据控制生产结果。带有<code>yield</code>的函数为生成器，每次调用到<code>yield</code>停止，再次调用会从上次结束的地方，保持上次的状态执行到<code>yield</code>关键字</li>
+<li><code>break</code>：跳出循环</li>
+<li><code>except</code>：与<code>try</code>一起用，捕获异常，进行异常处理</li>
+<li><code>import</code>：加载模块，使外部模块可以调用</li>
+<li><code>class</code>：类，定义类</li>
+<li><code>in</code>：如果<code>xxx</code>在<code>yyy</code>中，则<code>xxx in yyy</code>返回<code>True</code>。可以与<code>for</code>一起做for-loop</li>
+<li><code>raise</code>：强制抛出一个异常</li>
+<li><code>continue</code>：跳出本次循环并进行下一次循环</li>
+<li><code>finally</code>：在<code>try</code>块后引用，无论是否出现异常，总会执行<code>finally</code>块</li>
+<li><code>is</code>：判断两者是否为同一对象，类型相同且值相同时返回<code>True</code>，否则返回<code>False</code></li>
+<li><code>return</code>：返回，在函数中返回值</li>
+<li><code>def</code>：定义函数</li>
+<li><code>for</code>：for-loop使用，与<code>in</code>一起</li>
+<li><code>lambda</code>：匿名函数</li>
+<li><code>try</code>：用于异常处理，放在函数执行前，配合<code>except</code>从句和<code>finally</code>块使用</li>
+<li><code>nonlocal</code>：用于闭包内修改外部变量。如果不定义<code>nonlocal</code>，闭包内只能读外部变量，而不能修改（非全局变量）</li>
+<li><code>None</code>：常量，空值，数据类型为<code>NoneType</code>，与非<code>None</code>值比较总返回<code>False</code></li>
+<li><code>True</code>：布尔值，真</li>
+<li><code>False</code>：布尔值，假</li>
+</ul>
+<ol start="2">
+<li>字符串格式化 <code>print(&quot;The format is %* &quot; % arg)</code> *替换以下格式</li>
+</ol>
+<ul>
+<li><code>%d</code>，<code>%i</code>：带符号的十进制整数</li>
+<li><code>%o</code>：不带符号的八进制</li>
+<li><code>%u</code>：不带符号的十进制</li>
+<li><code>%x</code>：不带符号的十六进制（小写）</li>
+<li><code>%X</code>：不带符号的十六进制（大写）</li>
+<li><code>%e</code>：科学计数法的浮点数（小写）</li>
+<li><code>%E</code>：科学计数法的浮点数（大写）</li>
+<li><code>%f</code>，<code>%F</code>：十进制浮点数</li>
+<li><code>%g</code>：如果指数大于-4或者小于精度值则和e相同，否则和f相同</li>
+<li><code>%G</code>：如果指数大于-4或者小于精度值则和E相同，否则和F相同</li>
+<li><code>%c</code>：单字符（接受整数或者单字符字符串）</li>
+<li><code>%r</code>：字符串（使用<code>repr</code>转换任意Python对象）</li>
+<li><code>%s</code>：字符串（使用<code>str</code>转换任意Python对象）</li>
+</ul>
+<ol start="3">
+<li>操作符号</li>
+</ol>
+<ul>
+<li><code>+</code>：加法，正则中可匹配1个或多个字符</li>
+<li><code>-</code>：减法，负号，正则中可连接一个字符范围</li>
+<li><code>*</code>：乘法，正则中可匹配0个或多个字符；收集其余的位置参数</li>
+<li><code>**</code>：幂运算；收集关键字参数</li>
+<li><code>/</code>：除法</li>
+<li><code>//</code>：除法，结果向下取整</li>
+<li><code>%</code>：取余</li>
+<li><code>&lt;</code>：小于</li>
+<li><code>&gt;</code>：大于</li>
+<li><code>&lt;=</code>：小于等于</li>
+<li><code>&gt;=</code>：大于等于</li>
+<li><code>==</code>：等于，相等返回<code>True</code></li>
+<li><code>!=</code>：不等于</li>
+<li><code>()</code>：运算中的优先计算；函数定义或调用时包含参数；正则中用于分组；定义元组</li>
+<li><code>[]</code>：定义列表；序列中放置索引；正则中的范围单字符</li>
+<li><code>&#123;&#125;</code>：定义字典；正则中用于指定重复次数</li>
+<li><code>@</code>：修饰符，包装函数（需要深入一下）</li>
+<li><code>,</code>：分隔参数</li>
+<li><code>:</code>：开始新的代码块；索引集省略中间索引；键值对分隔</li>
+<li><code>.</code>：子模块，对象属性</li>
+<li><code>=</code>：赋值</li>
+<li><code>;</code>：表达式结束</li>
+<li><code>+=</code>：加值符</li>
+<li><code>-=</code>：减值符</li>
+<li><code>*=</code>：乘值符</li>
+<li><code>/=</code>：除值符</li>
+<li><code>//=</code>：除值符，结果向下取整</li>
+<li><code>%=</code>：余值符</li>
+<li><code>**=</code>：幂值符</li>
+</ul>
+<h4 id="Ex38"><a href="#Ex38" class="headerlink" title="Ex38"></a>Ex38</h4><ol>
+<li>列表的索引可以使用负值，相当于倒序取值</li>
+<li><code>&#39;xxx&#39;.join(列表)</code>可以用<code>xxx</code>连接列表每项</li>
+<li>Python的面向对象方法可理解成，以自身作为其中一个参数的函数调用</li>
+</ol>
+<h4 id="Ex39"><a href="#Ex39" class="headerlink" title="Ex39"></a>Ex39</h4><ol>
+<li>字典的方法</li>
+</ol>
+<ul>
+<li><code>clear()</code>：清空字典中所有元素</li>
+<li><code>copy()</code>：复制，复制一个字典副本（新的内存）</li>
+<li><code>dict.fromkeys(S [,v])</code>：这个是dict类型的方法，用于构造新字典。如果<code>S</code>可迭代，则迭代<code>S</code>的值作为<code>key</code>，对应的值为<code>v</code>。<code>v</code>没填默认为<code>None</code></li>
+<li><code>get(k[,d])</code>：取值，如果字典中<code>k</code>键存在，则取<code>k</code>对应的值；否则，有<code>d</code>参数取<code>d</code>，没设<code>d</code>默认为<code>None</code></li>
+<li><code>items()</code>：字典元素的集合（键值对集）</li>
+<li><code>keys()</code>：字典键的集合</li>
+<li><code>pop(k[,d])</code>：提取，如果<code>k</code>键存在，则取<code>k</code>对应的值；否则，有<code>d</code>参数取<code>d</code>，没设<code>d</code>默认为<code>None</code></li>
+<li><code>popitem()</code>：提取键值对，后进先出</li>
+<li><code>setdefault(k[,d])</code>：执行<code>get(k[,d])</code>，如果<code>k</code>键不存在，把<code>k</code>键的值设为<code>d</code></li>
+<li><code>values()</code>：值的集合</li>
+</ul>
+<h4 id="Ex40"><a href="#Ex40" class="headerlink" title="Ex40"></a>Ex40</h4><ol>
+<li>类的定义<code>class Xxx(object):</code>，意思为定义继承<code>object</code>的<code>Xxx</code>类型，需定义一个<code>__init__(self[, values])</code>函数作为初始化（或<code>pass</code>）</li>
+</ol>
+<h4 id="Ex41"><a href="#Ex41" class="headerlink" title="Ex41"></a>Ex41</h4><ol>
+<li>一些词汇</li>
+</ol>
+<ul>
+<li><code>class</code>：定义类的关键字。告诉Python创建新类型</li>
+<li><code>object</code>：对象。最基本类型</li>
+<li><code>instance</code>：实例。Python除元类外，都是某个类的实例</li>
+<li><code>def</code>：定义类里边函数关键字</li>
+<li><code>self</code>：对自身的调用。<code>class</code>里的函数都会有这个参数，指代被访问的<code>object</code>或<code>instance</code>的一个变量</li>
+<li><code>inheritance</code>：继承。指一个<code>class</code>可以继承另一个类的特性，和父子关系类似</li>
+<li><code>composition</code>：构建。指一个<code>class</code>可以作为另一个类的部件构建起来，像车子和车轮的关系</li>
+<li><code>attribute</code>：属性。<code>class</code>的一个属性，来自<code>composition</code>，通常是一个变量</li>
+<li><code>is-a</code>：用来描述一个继承关系，如<code>Salmon is-a Fish</code>，三文鱼是一种鱼</li>
+<li><code>has-a</code>：描述一种东西是另外一些东西组成，或是有某个特征，<code>Salmon has-a mouth</code>，三文鱼有嘴（这个特征）</li>
+</ul>
+<h4 id="Ex42"><a href="#Ex42" class="headerlink" title="Ex42"></a>Ex42</h4><ol>
+<li>Python中的一切都是对象，要么是类的实例，要么是元类的实例，除了<code>type</code></li>
+</ol>
+<h4 id="Ex43"><a href="#Ex43" class="headerlink" title="Ex43"></a>Ex43</h4><ol>
+<li>在函数的结束时返回函数名，加上括号就可以调用了</li>
+<li><code>getattr()</code>从某个对象中取出某个属性</li>
+</ol>
+<h4 id="Ex44"><a href="#Ex44" class="headerlink" title="Ex44"></a>Ex44</h4><ol>
+<li><code>super(本类名,self)</code>允许子类中调用父类的方法或属性。多重继承时，如果调用父类方法时，方法在在多个父类中重复，Python会有算法判断该用那个父类的方法</li>
+<li>合成有别于继承，把类的属性实例化为要合成的对象，譬如<code>self.name = Name()</code>，这时，就可以通过调<code>用self.name</code>使用<code>Name</code>类中的方法了</li>
+<li>编码规范</li>
+</ol>
+<ul>
+<li><p>编码布局</p>
+<ul>
+<li>缩进<ul>
+<li>使用4空格进行分块缩进</li>
+<li>不要空格与制表符混合使用，要么全是空格，要么全是制表符</li>
+</ul>
+</li>
+<li>分行<ul>
+<li>单行最大长度为79字符，推荐最大为72字符</li>
+<li>长行需要拆分显示，拆分行时在运算符后进行拆分</li>
+<li>续行使用8空格制表符（tab）</li>
+</ul>
+</li>
+<li>空行<ul>
+<li>分隔独立函数与类定义用双空行</li>
+<li>类中的方法定义之间分隔使用单空行</li>
+<li>使用空行分隔一些有关联的定义或函数</li>
+<li>使用空行划分逻辑块</li>
+</ul>
+</li>
+<li>字符集<ul>
+<li>Python 2.x发行版编译时使用ASCII或Latin-1编码，3.0以上都是使用UTF-8</li>
+<li>标识符（命名）必须使用ASCII，应该使用易读的英文</li>
+<li>字符串文字和注释都必须使用ASCII</li>
+<li>但对于中文注释，需要在开始处插入<code># -*- coding: utf-8 -*-</code>，字符串还需要转换成utf-8编码</li>
+</ul>
+</li>
+<li>加载<ul>
+<li>加载模块时应该分行加载，不应该<code>import xxx, yyy</code></li>
+<li>加载单一模块中的子模块时，可以使用逗号分隔子模块，<code>from xxx import xxx, yyy</code></li>
+<li>加载总是放在文件开始处，在模块注释文档后，在定义全局变量和模块内容前</li>
+<li>加载包括标准类库，关联的第三方类库，本地特有的应用或类库</li>
+<li>在多组加载之间使用空行分隔</li>
+<li>不推荐使用相对路径加载内置包，要使用绝对包路径加载</li>
+<li>如果<code>xxx</code>中包含<code>yyy</code>模块，可以<code>import xxx</code>，在通过<code>xxx.yyy</code>使用<code>yyy</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>表达式和语句中的空白</p>
+<ul>
+<li>多余的<ul>
+<li>紧接中括号、圆括号和大括号内两侧的空白</li>
+<li>紧接逗号、分号、冒号前的空白</li>
+<li>紧接函数名与参数左侧括号之间的空白</li>
+<li>紧接列表名与索引或切片左侧中括号之间的空白</li>
+<li>在操作符周围填充，是多个操作符对齐的空白</li>
+</ul>
+</li>
+<li>其他建议<ul>
+<li>在以下操作符两边加上一个空格：赋值符（<code>=</code>）、各种增值符（<code>+=</code>，<code>-=</code>等）、判断符（<code>==</code>，<code>&lt;</code>，<code>&gt;</code>，<code>!=</code>，<code>&lt;&gt;</code>，<code>&lt;=</code>，<code>&gt;=</code>，<code>in</code>，<code>not is</code>，<code>is</code>，<code>is not</code>）、逻辑符（<code>and</code>，<code>or</code>，<code>not</code>）</li>
+<li>对于运算符，应该在低优先级的运算符两边增加一个空格，如<code>x*y + z</code></li>
+<li>不要在配置函数关键字参数和默认值的等号（&#x3D;）两边加空格</li>
+<li>不提倡复合语句，不提倡多条语句写在一行</li>
+<li>可以在<code>if</code>、<code>for</code>、<code>while</code>语句的冒号后写一个小语句，但不能写多行语句，更不推荐写成一个长行</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>注释</p>
+<ul>
+<li>提示<ul>
+<li>错误注释代码比没有注释更糟糕。所以要保持注释更新</li>
+<li>注释是一句话，格式要跟语言格式一致</li>
+<li>大段的注释要有标点</li>
+<li>请用英文写注释，除非120%肯定读代码都懂中文</li>
+</ul>
+</li>
+<li>块注释<ul>
+<li>块注释要与紧随的代码有同一缩进级别</li>
+<li>每一行都要以井号（<code>#</code>）和一个空格开始</li>
+</ul>
+</li>
+<li>行内注释<ul>
+<li>节制使用行内注释</li>
+<li>与语句同一行，与语句至少分隔两个空格，以井号（<code>#</code>）和一个空格开始</li>
+<li>行内注释是不必要的，但如果需要特别注意的地方加上行内注释，会非常有用</li>
+</ul>
+</li>
+<li>文档字符串<ul>
+<li>为所有公用模块、函数、类和方法写上文档字符串</li>
+<li>在多行文档字符串结束符<code>&quot;&quot;&quot;</code>上方增加一个空行</li>
+<li>单行的话可以把结束符<code>&quot;&quot;&quot;</code>写在同一行</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>版本纪录维护<br> *  如果对代码进行了版本维护，需要增加两行。第一行为：<code>__version__ = &quot;Reversion: xxxxxxxx $&quot;</code>第二行为：<code># $Source$</code>这两句放在模块文档字符串后所有代码前，并且前后各添加一个空行</p>
+</li>
+<li><p>命名惯例</p>
+<ul>
+<li>描述性：命名样式<ul>
+<li>通常的样式有：<ul>
+<li><code>b</code>：单小写字母</li>
+<li><code>B</code>：单大写字母</li>
+<li><code>lowercase</code>：小写单词</li>
+<li><code>lower_case_with_underscores</code>：带下划线的小写单词组</li>
+<li><code>UPPERCASE</code>：大写单词</li>
+<li><code>UPPER_CASE_WITH_UNDERSCORES</code>：带下划线的大写单词组</li>
+<li><code>CapitalizeWors</code>：驼峰式（每个单词首字母大写，缩写的每个字母都要大写，如HTTP）</li>
+<li><code>mixedCase</code>：首字母小写的驼峰式</li>
+<li><code>Capitalize_Words_With_Underscores</code>：用下划线连接的驼峰式</li>
+<li><code>_single_leading_underscore</code>：内部私有函数，不能通过<code>from xxx import *</code>导入</li>
+<li><code>single_trailing_underscore_</code>：用于作为参数时与Python关键字冲突</li>
+<li><code>__double_leading_underscore</code>：命名一个类的属性时，名称会重整。<code>Xxx</code>类含<code>__yyy</code>属性，则命名为<code>_Xxx__yyy</code></li>
+<li>__double_leading_and_trailing_underscore__：用户控制的命名空间里的魔法对象或属性。不能创造这种命名，只能按文档使用</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>惯例的：命名约定<ul>
+<li>切勿使用<code>l</code>（小写<code>L</code>）、<code>O</code>（大写<code>o</code>）、<code>I</code>（大写<code>i</code>）作为单字符命名</li>
+<li>模块使用小写短名，可以使用下划线增强可读性；包名也推荐使用小写短名，但不推荐用下划线</li>
+<li>类的命名使用驼峰式。只供内部使用的类要加上前置下划线</li>
+<li>异常命名与类的命名方式类似，如果是错误则需要加上<code>Error</code>后缀</li>
+<li>通过定义<code>__all__</code>防止模块输出全局变量，或是在命名前加一个下划线进行内部私有化。把全剧变量当作非公共模块</li>
+<li>函数定义使用<code>lower_case_with_underscores</code></li>
+<li>总是使用<code>self</code>做为实例方法的第一个参数，总是使用<code>cls</code>作为类方法的第一个参数</li>
+<li>避免函数命名与关键字冲突的方法是在最后加一个下划线，或者可以使用非关键字的同义词</li>
+<li>方法名和实例变量的命名与函数命名规则一致，使用<code>lower_case_with_underscores</code>；非公共函数使用一个下划线开头；避免与子类的命名冲突，可以使用两个下划线开头，再由Python整合命名</li>
+<li>常量在模块级别定义，使用<code>UPPER_CASE_WITH_UNDERSCORES</code><br>养成对类方法和实例变量进行私有或公共的分类。如果不能肯定是该公共或是该私有，就先定义为私有的</li>
+<li>实际上，Python并没有实质的私有概念，因为没有真实存在的私有属性。在开头加个下划线，也只是避免<code>import</code>时进行导入，实际通过<code>Xxx._yyy</code>也是可以使用的</li>
+</ul>
+</li>
+<li>一些建议：<ul>
+<li>公共方法一律不加前导下划线</li>
+<li>如果命名与关键字冲突，则添加后缀下划线</li>
+<li>对于简单的公共数据属性，可以使用@property进行装饰。这个只能在新式类上使用；保持函数行为无副作用，譬如不会影响缓存；不要在计算复杂操作上使用属性装饰，只要很低代价就可以调用这种属性</li>
+<li>如果在子类继承中，不希望子类继承的属性，可以使用双下划线开头的命名方式；使用命名重整的父类要求简单的命名；命名重整会使调试或取属性魔法函数变得不方便，但命名重整的规则是有文档规范和容易实现的；可以通过改进调用方式，平衡命名重整的使用</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>编程建议</p>
+<ul>
+<li>用一种不会对Python其他实现（PyPy，Jython，IronPython，Cython，Pysco等）产生消极影响的方式进行编程</li>
+<li>单一实例的比较不要使用<code>==</code>或<code>!=</code>运算符，应该使用<code>is</code>或<code>is not</code>进行比较。如<code>is None</code>或<code>is not None</code></li>
+<li><code>if xxx</code>意思是<code>if xxx is not None</code></li>
+<li>如果排序算法含有大量比较时，推荐使用以下六个比较方法：<code>__eq__</code>等于，<code>__ne__</code>不等于，<code>__lt__</code>小于，<code>__le__</code>小于等于，<code>__gt__</code>大于，<code>__ge__</code>大于等于。实际的比较运算符也是调用了以上方法</li>
+<li>使用以类为基础的异常。必须继承<code>Exception</code>基类，添加文档注释。使用类的命名规则，如果是错误，要加上<code>error</code>后缀</li>
+<li>当抛出一个异常时，使用<code>raise XxxError(&quot;yyy&quot;)</code>代替旧格式<code>raise XxxError, &quot;yyy&quot;</code></li>
+<li>当捕获一个异常时，如果可以都要把具体的异常写上<code>except XxxError:</code>，而不是裸<code>except:</code></li>
+<li>裸<code>except:</code>可以捕获<code>SystemExit</code>和<code>KeyboardInterrupt</code>异常，相当于<code>except BaseException:</code>。<code>except Exception:</code>可以捕获所有异常。</li>
+<li>在以下场景不使用裸<code>except:</code>:知道发生了错误，要把错误打印回溯日志；使用<code>try...finally</code>子句处理<code>raise</code>抛出的异常</li>
+<li>在<code>try:</code>子句中包含最小量代码，以避免缺陷覆盖</li>
+<li>当上下文管理器进行不是获取或释放对象资源的调用操作时，需要通过对对象的方法或函数进行调用。<code>with xxx.yyy(): do(xxx)</code>而不是<code>with xxx: do(yyy)</code></li>
+<li>使用字符串方法代替引用字符串模块。同一操作，字符串方法会比其他字符串处理快很多</li>
+<li>使用<code>&#39;xxx&#39;.startswith()</code>和<code>&#39;xxx&#39;.endswith()</code>检查字符串前缀和后缀。这样更简洁，更不易出错</li>
+<li>使用<code>isinstance()</code>进行对象类型比较。普通字符串和<code>unicode</code>字符串可以使用共同基类<code>basestring</code></li>
+<li>对于序列(字符串，列表，元组），空队列为<code>False</code>。所以不要使用长度为0进行判空，而是直接使用<code>if not xxx:</code>进行判空</li>
+<li>字符串后不要加空格，因为一般会看不出来，而且会被一些编辑器删掉</li>
+<li>不要使用<code>is</code>和<code>==</code>比较布尔值</li>
+<li>Python标准库没有提供函数注释，因为怕形成一种过早的约定和特定的注解样式。建议自行发掘适合自身的注解方式</li>
+</ul>
+</li>
+</ul>
+<h4 id="Ex46"><a href="#Ex46" class="headerlink" title="Ex46"></a>Ex46</h4><p>项目框架</p>
+<blockquote>
+<p><code>projects\</code>  </p>
+<blockquote>
+<p><code>proj_hello\（项目名）</code></p>
+<blockquote>
+<p><code>setup.py（安装文件）</code></p>
+<p><code>NAME\（任意命名）</code></p>
+<blockquote>
+<p><code>__init__.py</code></p>
+</blockquote>
+<p><code>bin\</code><br><code>docs\</code><br><code>tests\</code></p>
+<blockquote>
+<p><code>NAME_test.py</code><br><code>__init__.py</code></p>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+<p>对项目执行测试要在项目名下级执行nosetests</p>
+<blockquote>
+<p>Written with <a target="_blank" rel="noopener" href="https://stackedit.io/">StackEdit</a>.</p>
+</blockquote>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/STUDY/">STUDY</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/PYTHON/">PYTHON</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2014/02/19/2014-02-19-study-storm-1/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Storm学习笔记（一）</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2013/11/22/2013-11-22-markdown-syntax/">
+                        <span class="hidden-mobile">MarkDown语法</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>

@@ -1,0 +1,536 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Ghold Lo">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="我在一年前开始使用Thrift，契机是当时要开发一个后台内部数据查看工具。公司内部大多数系统都是使用Java作为主要语言，而我在毕业设计是对Java产生了厌恶，决心在未来应该尽可能远离Java开发（可惜事与愿违，现在已经成为职业Java开发）。那时我还是一个爱写小程序的测试工程师，比较偏向类似于Python、Javascript等等的“小语种”，这时，我遇到了Thrift。   Thrift是由著">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Thrift实战两则">
+<meta property="og:url" content="http://ghold.net/2015/04/19/2015-04-19-thrift-experience/index.html">
+<meta property="og:site_name" content="Welcome|Ghold&#39;s Programming Version">
+<meta property="og:description" content="我在一年前开始使用Thrift，契机是当时要开发一个后台内部数据查看工具。公司内部大多数系统都是使用Java作为主要语言，而我在毕业设计是对Java产生了厌恶，决心在未来应该尽可能远离Java开发（可惜事与愿违，现在已经成为职业Java开发）。那时我还是一个爱写小程序的测试工程师，比较偏向类似于Python、Javascript等等的“小语种”，这时，我遇到了Thrift。   Thrift是由著">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2015-04-19T02:00:00.000Z">
+<meta property="article:modified_time" content="2022-02-19T07:38:24.257Z">
+<meta property="article:author" content="Ghold Lo">
+<meta property="article:tag" content="THRIFT JAVA NODEJS JAVASCRIPT">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome/css/font-awesome.min.css"><script src="https://cdn.jsdelivr.net/gh/Gholdnet01/live2d-widget@latest/autoload.js"></script>
+  
+  <title>Thrift实战两则 - Welcome|Ghold&#39;s Programming Version</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"ghold.net","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 6.0.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>物欲退散</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="Thrift实战两则">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2015-04-19 10:00" pubdate>
+        2015年4月19日 上午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      6.1k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      51 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Thrift实战两则</h1>
+            
+            <div class="markdown-body">
+              <p>我在一年前开始使用Thrift，契机是当时要开发一个后台内部数据查看工具。公司内部大多数系统都是使用Java作为主要语言，而我在毕业设计是对Java产生了厌恶，决心在未来应该尽可能远离Java开发（可惜事与愿违，现在已经成为职业Java开发）。那时我还是一个爱写小程序的测试工程师，比较偏向类似于Python、Javascript等等的“小语种”，这时，我遇到了Thrift。</p>
+<!-- excerpt -->
+
+<p><a target="_blank" rel="noopener" href="http://thrift.apache.org/">Thrift</a>是由著名社交网站Facebook开发的开源软件框架，现在已加入到Apache孵化器中。以下引用官网对Thrift的定义：</p>
+<blockquote>
+<p>The Apache Thrift software framework, for scalable cross-language services development, combines a software stack with a code generation engine to build services that work efficiently and seamlessly between C++, Java, Python, PHP, Ruby, Erlang, Perl, Haskell, C#, Cocoa, JavaScript, Node.js, Smalltalk, OCaml and Delphi and other languages.</p>
+</blockquote>
+<p>经过学习发现，Thrift有两点适合我：一是，Thrift提供了生成器，可以简单生成接口服务代码，很适合懒人使用；二是，跨语言交互，能支持10多种语言进行通信，很多有趣的事情都可以简单做到。尤其是跨语言交互，利用服务化的接口建立不同语言间的服务端和客户端，只需要简单地实现接口，即可实现各种语言间的通讯。</p>
+<hr>
+<h3 id="Java与nodejs"><a href="#Java与nodejs" class="headerlink" title="Java与nodejs"></a>Java与nodejs</h3><p>工具是用来解决问题的，我认为选择合适的工具可以增添解决问题的趣味性。传统上，做一个接口查询Java后台的数据，有以下两种方法：对内使用struts＋Jsp的方式，对外使用webservice方式。前者使用一大堆action和占位符模版——一个字，累；后者使用冗长的xml作为通讯协议——两个字，乏味。Thrift则给了我一个简单有趣的解决方案。</p>
+<p>先看以下的文本：</p>
+<figure class="highlight reasonml"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></div></td><td class="code"><pre><code class="hljs reasonml"># hello.thrift<br>service HelloService &#123;<br>  <span class="hljs-built_in">string</span> get<span class="hljs-constructor">HelloInterface(1:<span class="hljs-params">string</span> <span class="hljs-params">arg1</span>, 2:<span class="hljs-params">string</span> <span class="hljs-params">arg2</span>)</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>以上就是Thrift框架的原型接口文本，乍看这三行玩意不是能用的范。不过还需要进行加工，这时我们可以选择自己喜欢的语言：首先是服务端是Java无疑，毕竟是用Java写的后台；其次我选择了nodejs，因为当时在学习nodejs，进行点实践还是要的。</p>
+<p>在Windows下，我们需要使用官方的thrift.exe对原型接口进行转化生成。在cmd中执行</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs powershell">thrift.exe <span class="hljs-literal">-r</span> <span class="hljs-literal">--gen</span> java hello.thrift<br>thrift.exe <span class="hljs-literal">-r</span> <span class="hljs-literal">--gen</span> js:node hello.thrift<br></code></pre></td></tr></table></figure>
+
+<p>，在Mac中则是去掉.exe(前提是已经安装了Thrift，请自行官网找安装教程)，会分别产生两种语言的接口服务，均可以用来建立各自语言服务端和客户端。</p>
+<h4 id="选择Java服务模型"><a href="#选择Java服务模型" class="headerlink" title="选择Java服务模型"></a>选择Java服务模型</h4><p>使用Thrift框架写服务端有以下流程：实现服务接口方法、定义处理器（处理方式）、定义传输方式、定义传输数据协议、组成服务端。而Thrift则提供了很多模型进行选择。服务器的模型会影响到数据传输方式、传输数据协议选择等通讯方式参数，具体方式请参考<a target="_blank" rel="noopener" href="http://www.micmiu.com/soa/rpc/thrift-sample/">Thrift入门及Java实例演示</a>。当时我不想指定客户端的传输方式，所以选择了支持多线程的线程池服务模型。</p>
+<p>按照入门里的说法，首先要实现了QueryService的接口方法，即工具的查询业务。在把方法嵌入模型中，启动服务端，一个简单的多线程socket服务端就架起了。</p>
+<h4 id="架设nodejs客户端"><a href="#架设nodejs客户端" class="headerlink" title="架设nodejs客户端"></a>架设nodejs客户端</h4><p>服务端架起了总得有人用。Thrift的强大之一，是在于它提供了接口服务代码，客户端只需要知道服务模型，即可轻松接入。</p>
+<p>上面使用的服务模型是传输方式为socket、传输数据协议是TBinaryProtocol。而我们将要使用的nodejs只需要以下代码：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">var</span> thrift = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;thrift&#x27;</span>);<br><span class="hljs-keyword">var</span> <span class="hljs-title class_">HelloService</span> = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;./gen-nodejs/HelloService.js&#x27;</span>),<br>  ttypes = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;./gen-nodejs/hello_types.js&#x27;</span>);<br><br><span class="hljs-keyword">var</span> connection = thrift.<span class="hljs-title function_">createConnection</span>(<span class="hljs-variable constant_">IP</span>, <span class="hljs-variable constant_">PORT</span>),<br>  client = thrift.<span class="hljs-title function_">createClient</span>(<span class="hljs-title class_">HelloService</span>, connection);<br><br>connection.<span class="hljs-title function_">on</span>(<span class="hljs-string">&#x27;error&#x27;</span>, <span class="hljs-keyword">function</span>(<span class="hljs-params">err</span>) &#123;<br>  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">error</span>(err);<br>&#125;);<br><br>client.<span class="hljs-title function_">getHelloInterface</span>(arg1,arg2, <span class="hljs-keyword">function</span>(<span class="hljs-params">err, res</span>) &#123;<br>  <span class="hljs-keyword">if</span> (err) &#123;<br>    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">error</span>(err);<br>  &#125; <span class="hljs-keyword">else</span> &#123;<br>  <span class="hljs-comment">// to do something with res</span><br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>这是thrift在nodejs中实现最简易客户端的写法，对于我要的业务查询功能已经足够。这时，我们已经轻松把Java桌上的数据，搬到nodejs上，接受下一步过滤和生成页面。</p>
+<p>如果不包含业务代码，服务端与客户端代码总计不超过100行。接下来讲讲最近的另一次Thrift经历。</p>
+<hr>
+<h3 id="Java与Javascript"><a href="#Java与Javascript" class="headerlink" title="Java与Javascript"></a>Java与Javascript</h3><p>工作中总会遇到各种烦心事，譬如你把nodejs用得正欢时，突然被告知生产上的应用需要使用Jetty容器发布。Jetty是什么？Google一下发现原来是一个Java Http服务器和运行Java Servlet的容器。看到定义中带着一堆的Java，不禁黯然，果然后来发现上面只兼容Java的服务！（当时我马上发出感概，Docker会流行起来，这应该是间接原因。）这意味着我必须放弃依靠操作系统的nodejs。但是，我不想把前端的一些生成器和过滤器给丢了，我想，总有办法可以解决。没错，强大的Thrift又再次带来惊喜。</p>
+<p>nodejs其实上是封装了Google开发的V8-Javascript处理器，也就是说，写的代码用的也是Javascript语言。在cmd中执行以下脚本，可以迅速产生对应的Javacript服务接口：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs powershell">thrift.exe <span class="hljs-literal">-r</span> <span class="hljs-literal">--gen</span> js hello.thrift<br></code></pre></td></tr></table></figure>
+
+<p>产生的js文件只要在页面上进行引用，就可以方便地使用Thrift客户端功能（Javascript上只提供客户端功能）：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;js/thrift.js&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;js/gen-js/HelloService.js&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="变更Java服务模型"><a href="#变更Java服务模型" class="headerlink" title="变更Java服务模型"></a>变更Java服务模型</h4><p>值得注意的是，使用Javascript作为客户端，传输方式和传输数据协议都没有Java和nodejs丰富。如传输方式只支持XMLHttpRequest（XHR）和webSocket，而对于查询的功能，使用XHR进行异步调用即可；而传输数据协议貌似只有JSON的协议（源码中注释有TBinaryProtocol，不过没有看到实现）。这样，之前的多线程Socket服务模型就玩不转了，只能把服务端重构一下。</p>
+<p>由于传输方式变成了XHR方式，那么服务端也要变成可以提供Http服务。Thrift提供了对Java内置HttpServlet的扩展，这次就用这个技术产生一个Thrift的服务端。不过我会做得扩展性更好（<a href="">原文</a>）：</p>
+<p>首先是实现处理接口，这个可以重用之前实现HelloService.Iface的代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// HelloHandler.java</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">HelloHandler</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">HelloService</span>.Iface &#123;<br>	<span class="hljs-meta">@override</span><br>	<span class="hljs-keyword">public</span> String <span class="hljs-title function_">getHelloInterface</span><span class="hljs-params">(String arg1, String arg2)</span>&#123;<br>		<span class="hljs-keyword">return</span> <span class="hljs-string">&quot;Hello&quot;</span>;<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>接着是实现处理方式，这里为了以后扩展多种处理接口，使用多重处理方式：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// HelloProcessor.java</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">HelloProcessor</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">HelloService</span>.Processor&lt;HelloHandler&gt; &#123;<br>    <span class="hljs-keyword">private</span> HelloHandler handler;<br>    <span class="hljs-keyword">public</span> <span class="hljs-title function_">HelloProcessor</span><span class="hljs-params">(HelloHandler iface)</span>&#123;<br>        <span class="hljs-built_in">super</span>(iface);<br>        handler = iface;<br>    &#125;<br>    <span class="hljs-keyword">public</span> HelloHandler <span class="hljs-title function_">getHandler</span><span class="hljs-params">()</span>&#123; <span class="hljs-keyword">return</span> handler;&#125;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">setHandler</span><span class="hljs-params">(HelloHandler handler)</span>&#123;<span class="hljs-built_in">this</span>.handler = handler;&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// ApiMultiplexingProcessor.java</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">ApiMultiplexingProcessor</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">TMultiplexedProcessor</span> &#123;<br>    HelloHandler helloHandler;<br>    <span class="hljs-keyword">private</span> HelloProcessor helloProcessor;<br>    <span class="hljs-keyword">public</span> <span class="hljs-title function_">ApiMultiplexingProcessor</span><span class="hljs-params">(HelloProcessor helloProcessor)</span>&#123;<br>        <span class="hljs-built_in">this</span>.registerProcessor(<span class="hljs-string">&quot;HelloService&quot;</span>, helloProcessor);<br>        helloHandler = helloProcessor.getHandler();<br>    &#125;<br>    <span class="hljs-keyword">public</span> HelloHandler <span class="hljs-title function_">getHelloHandler</span><span class="hljs-params">()</span> &#123;<span class="hljs-keyword">return</span> helloHandler;&#125;<br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">setHelloHandler</span><span class="hljs-params">(HelloHandler helloHandler)</span> &#123;<br>		<span class="hljs-built_in">this</span>.helloHandler = helloHandler;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>最后是创建Servlet，这时要指定传输数据协议：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">ApiServlet</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">TServlet</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-title function_">ApiServlet</span><span class="hljs-params">()</span>&#123;<br>        <span class="hljs-built_in">super</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">ApiMultiplexingProcessor</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">HelloProcessor</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">HelloHandler</span>())), <span class="hljs-keyword">new</span> <span class="hljs-title class_">TJSONProtocol</span>.Factory());<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>这样，只要在Jetty上发布这个Servlet，就可以让客户端访问了。</p>
+<p>也许还有个问题是，这里少了传输方式？其实Servlet已经指定了传输方式是Http，如果有兴趣，可以自行定制。</p>
+<h3 id="Javascript客户端"><a href="#Javascript客户端" class="headerlink" title="Javascript客户端"></a>Javascript客户端</h3><p>使用Javascript编写Thrift客户端，需要进行以下几步（也可参看介绍服务端模型时的文章）：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-comment">// 创建Transport，默认是XHR传输方式：</span><br><span class="hljs-keyword">var</span> transport = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Thrift</span>.<span class="hljs-title class_">Transport</span>(<span class="hljs-string">&quot;./apiServlet&quot;</span>);<br><br><span class="hljs-comment">// 基于Transport创建Protocol，由于服务端使用的是多重服务，</span><br><span class="hljs-comment">// 这里的协议也是要支持多重服务协议，而数据协议默认是TJSONProtocol</span><br><span class="hljs-keyword">var</span> protocol = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Thrift</span>.<span class="hljs-title class_">MultiplexProtocol</span>(<span class="hljs-string">&quot;HelloService&quot;</span>, transport);<br><br><span class="hljs-comment">// 基于Transport和Protocol创建 Client，这里没有指定Transport的原因是上一步已经指定：</span><br><span class="hljs-keyword">var</span> client = <span class="hljs-keyword">new</span> <span class="hljs-title class_">HelloServiceClient</span>(protocol);<br><br><span class="hljs-comment">// 调用Client的相应方法</span><br>client.<span class="hljs-title function_">getHelloInterface</span>(arg1, args2, <span class="hljs-keyword">function</span>(<span class="hljs-params">data</span>)&#123;<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(data)&#125;);<br></code></pre></td></tr></table></figure>
+
+<p>完成以上几步，Javascript的Thrift客户端就完成了，剩下只需要把nodejs上的生成器和过滤器移植过来，启动客户端即可。</p>
+<hr>
+<h3 id="强大的扩展性"><a href="#强大的扩展性" class="headerlink" title="强大的扩展性"></a>强大的扩展性</h3><p>我觉得Thrift最强大的地方是简易扩展性。</p>
+<h4 id="例一：加方法"><a href="#例一：加方法" class="headerlink" title="例一：加方法"></a>例一：加方法</h4><p>需求是要在HelloService加一个getWorldInterface方法。</p>
+<p>只需：</p>
+<ol>
+<li><p>在hello.thrift中加一行：</p>
+ <figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs reasonml"># hello.thrift<br>service HelloService &#123;<br>	<span class="hljs-built_in">string</span> get<span class="hljs-constructor">HelloInterface(1:<span class="hljs-params">string</span> <span class="hljs-params">arg1</span>, 2:<span class="hljs-params">string</span> <span class="hljs-params">arg2</span>)</span>,<br>	<span class="hljs-built_in">string</span> get<span class="hljs-constructor">WorldInterface(1:<span class="hljs-params">string</span> <span class="hljs-params">arg1</span>)</span><br>&#125;<br></code></pre></td></tr></table></figure>
+</li>
+<li><p>重新生成接口代码，并替换掉原来的；</p>
+</li>
+<li><p>服务端与客户端都实现一下新增的接口方法即可。</p>
+</li>
+</ol>
+<h4 id="例二：加接口"><a href="#例二：加接口" class="headerlink" title="例二：加接口"></a>例二：加接口</h4><p>需求是要加一个WorldService接口，并且有一个getWorldInterface方法</p>
+<p>只需：</p>
+<ol>
+<li><p>在hello.thrift中加一个service：</p>
+ <figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs reasonml"># hello.thrift<br>service HelloService &#123;<br>	<span class="hljs-built_in">string</span> get<span class="hljs-constructor">HelloInterface(1:<span class="hljs-params">string</span> <span class="hljs-params">arg1</span>, 2:<span class="hljs-params">string</span> <span class="hljs-params">arg2</span>)</span><br>&#125;<br>service WorldService &#123;<br>	<span class="hljs-built_in">string</span> get<span class="hljs-constructor">WorldInterface(1:<span class="hljs-params">string</span> <span class="hljs-params">arg1</span>)</span><br>&#125;<br></code></pre></td></tr></table></figure>
+</li>
+<li><p>重新生成接口代码，把WorldService代码加入到应用中；</p>
+</li>
+<li><p>在多重服务TMultiplexedProcessor中注册新的接口方式（实战一需要改进processor为TMultiplexedProcessor，实战二中只需添加Handler和注册）；</p>
+</li>
+<li><p>客户端对指定的接口进行调用，如改变nodejs下的create方法和javascript下的protocol定义</p>
+</li>
+</ol>
+<p>如上，大概4步即可扩展一个新的接口。</p>
+<hr>
+<p>总结一下，以上是个人使用Thrift工作时的经验，不过我觉得Thrift是深坑，准备使用更多的语言去玩一玩。下一步应该是写个Python或者Go的客户端，如果有新东西在分享吧。</p>
+<blockquote>
+<p>Written with <a target="_blank" rel="noopener" href="https://stackedit.io/">StackEdit</a>.</p>
+</blockquote>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/TECHNIQUE/">TECHNIQUE</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/THRIFT-JAVA-NODEJS-JAVASCRIPT/">THRIFT JAVA NODEJS JAVASCRIPT</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2017/01/17/2017-01-17-node-https/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">node服务器部署https</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2015/03/24/2015-03-24-d3-matrix/">
+                        <span class="hidden-mobile">D3矩阵数据展示</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>

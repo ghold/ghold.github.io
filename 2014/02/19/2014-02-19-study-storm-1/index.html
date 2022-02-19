@@ -1,0 +1,560 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Ghold Lo">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="感谢xumingming提供的中文翻译《Twitter Storm的一些关键概念》感谢官方wiki提供的原文  一些概念计算拓扑：Topologies Topology对象里包含实时计算程序 一个Storm的Topology会一直运行——除非显式杀死 一个Topology是Spouts和Bolts组成的图状结构，而连接Spouts和Bolts的则是Stream groupings  参考阅读：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Storm学习笔记（一）">
+<meta property="og:url" content="http://ghold.net/2014/02/19/2014-02-19-study-storm-1/index.html">
+<meta property="og:site_name" content="Welcome|Ghold&#39;s Programming Version">
+<meta property="og:description" content="感谢xumingming提供的中文翻译《Twitter Storm的一些关键概念》感谢官方wiki提供的原文  一些概念计算拓扑：Topologies Topology对象里包含实时计算程序 一个Storm的Topology会一直运行——除非显式杀死 一个Topology是Spouts和Bolts组成的图状结构，而连接Spouts和Bolts的则是Stream groupings  参考阅读：">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2014-02-19T02:00:00.000Z">
+<meta property="article:modified_time" content="2022-02-19T07:40:53.456Z">
+<meta property="article:author" content="Ghold Lo">
+<meta property="article:tag" content="STROM">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome/css/font-awesome.min.css"><script src="https://cdn.jsdelivr.net/gh/Gholdnet01/live2d-widget@latest/autoload.js"></script>
+  
+  <title>Storm学习笔记（一） - Welcome|Ghold&#39;s Programming Version</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"ghold.net","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 6.0.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>物欲退散</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="Storm学习笔记（一）">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2014-02-19 10:00" pubdate>
+        2014年2月19日 上午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      3.6k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      31 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Storm学习笔记（一）</h1>
+            
+            <div class="markdown-body">
+              <blockquote>
+<p>感谢<a target="_blank" rel="noopener" href="http://xumingming.sinaapp.com/">xumingming</a>提供的中文翻译<a target="_blank" rel="noopener" href="http://xumingming.sinaapp.com/117/twitter-storm%E7%9A%84%E4%B8%80%E4%BA%9B%E5%85%B3%E9%94%AE%E6%A6%82%E5%BF%B5/">《Twitter Storm的一些关键概念》</a><br>感谢官方wiki提供的<a target="_blank" rel="noopener" href="https://github.com/nathanmarz/storm/wiki/Concepts">原文</a></p>
+</blockquote>
+<h3 id="一些概念"><a href="#一些概念" class="headerlink" title="一些概念"></a>一些概念</h3><h4 id="计算拓扑：Topologies"><a href="#计算拓扑：Topologies" class="headerlink" title="计算拓扑：Topologies"></a>计算拓扑：Topologies</h4><ol>
+<li>Topology对象里包含实时计算程序</li>
+<li>一个Storm的Topology会一直运行——除非显式杀死</li>
+<li>一个Topology是Spouts和Bolts组成的图状结构，而连接Spouts和Bolts的则是Stream groupings</li>
+</ol>
+<h5 id="参考阅读："><a href="#参考阅读：" class="headerlink" title="参考阅读："></a><em>参考阅读：</em></h5><ol>
+<li><a target="_blank" rel="noopener" href="http://nathanmarz.github.io/storm/doc/index.html">TopologyBuilder</a>：使用这个类在Java中构造计算拓扑</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/nathanmarz/storm/wiki/Running-topologies-on-a-production-cluster">在生产集群上运行计算拓扑</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/nathanmarz/storm/wiki/Local-mode">本地模式</a>：通过这篇文章学习如何在本地模式开发和测试计算拓扑</li>
+</ol>
+<!-- excerpt -->
+
+<h4 id="信息流：Streams"><a href="#信息流：Streams" class="headerlink" title="信息流：Streams"></a>信息流：Streams</h4><ol>
+<li>一个信息流是一个没有边界的tuple（数据元组）序列，而这些tuples会被以一种分布式的方式并行地创建和处理</li>
+</ol>
+<ul>
+<li>信息流是一个tuple序列</li>
+<li>没有边界是什么意思？</li>
+<li>分布式并行创建和处理。创建后用于分发到不同的Bolts进行处理？</li>
+</ul>
+<ol start="2">
+<li>在序列中的tuple有一致的结构，即不同tuple相同位置字段类型一样</li>
+<li>由于大多信息流都是单向的，每个Stream会带有一个id，作为唯一标识</li>
+</ol>
+<h5 id="参考阅读：-1"><a href="#参考阅读：-1" class="headerlink" title="参考阅读："></a><em>参考阅读：</em></h5><ol>
+<li><a target="_blank" rel="noopener" href="http://nathanmarz.github.com/storm/doc/backtype/storm/tuple/Tuple.html">Tuple（元组）</a>：信息流由元组组成</li>
+<li><a target="_blank" rel="noopener" href="http://nathanmarz.github.com/storm/doc/backtype/storm/topology/OutputFieldsDeclarer.html">OutputFieldsDeclarer</a>：用于定义信息流和信息流的结构</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/nathanmarz/storm/wiki/Serialization">Serialization（序列化器）</a>：关于Storm的元组动态类型和声明自定义序列化</li>
+<li><a target="_blank" rel="noopener" href="http://nathanmarz.github.com/storm/doc/backtype/storm/serialization/ISerialization.html">ISerialization</a>：自定义的序列化器都要使用这个接口</li>
+<li><a target="_blank" rel="noopener" href="http://nathanmarz.github.com/storm/doc/backtype/storm/Config.html#TOPOLOGY_SERIALIZATIONS">CONFIG.TOPOLOGY_SERIALIZATIONS</a>：自定义序列化器可以通过这个配置注册</li>
+</ol>
+<h4 id="信息源：Spouts"><a href="#信息源：Spouts" class="headerlink" title="信息源：Spouts"></a>信息源：Spouts</h4><ol>
+<li>Spouts在计算拓扑中扮演生产者的角色。一般来说，Spouts会从一个外部源读取数据生成数据元组，并把数据元组发射进计算拓扑中</li>
+<li>Spouts可以是可靠的也可以是不可靠的。</li>
+</ol>
+<ul>
+<li>可靠的信息源：如果Storm没有成功处理数据元组，信息源会重新发射一遍元组</li>
+<li>不可靠的信息源：一旦信息源发射完数据元组，就会忘记这个动作（不管发出去的数据元组是否成功处理）</li>
+</ul>
+<ol start="3">
+<li>Spouts可以发射多条信息流。使用OutputFieldsDeclarer.declareStream定义stream，使用OutputCollector.emit来选择要发射的stream</li>
+<li>Spouts类型中最重要的方法是nextTuple。nextTuple会做两件事：发射一个新的元组进计算拓扑或如果没有新的数据元组就简单放回（return）。要注意的是，nextTuple不能打断（block）任何Spout的实现，因为Storm会在同一个线程上调用全部Spout方法</li>
+<li>ack和fail是另外两个重要的方法。当Storm监测到Spout发出的数据元组被计算拓扑成功处理或者处理失败时，Storm会调用ack方法或者fail方法。Storm只为可靠的信息源调用ack和fail。</li>
+</ol>
+<h5 id="参考阅读：-2"><a href="#参考阅读：-2" class="headerlink" title="参考阅读："></a><em>参考阅读：</em></h5><ol>
+<li><a target="_blank" rel="noopener" href="http://nathanmarz.github.com/storm/doc/backtype/storm/topology/IRichSpout.html">IRichSpout</a>：信息源必须实现的接口</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/nathanmarz/storm/wiki/Guaranteeing-message-processing">如何保证信息不丢失</a></li>
+</ol>
+<h4 id="信息处理者：Bolts"><a href="#信息处理者：Bolts" class="headerlink" title="信息处理者：Bolts"></a>信息处理者：Bolts</h4><ol>
+<li>所有计算拓扑里的计算过程都封装在bolts中。Blots中可以实现所有过程，如过滤、函数、聚合、接合、与数据库联动等等</li>
+<li>Blots可以做简单的数据流传递。做复杂的信息流传递通常需要多个步骤，因此也需要多个Bolts。</li>
+<li>同样，Bolts也有可以发射多条信息流的特性。</li>
+<li>当声明一个Bolt的输入流时，需要订阅其他组件的特定数据流。如果想要订阅其他组件的全部数据流，你必须逐个订阅每个数据流。Storm中的InputDeclarer提供了方便的语法，用于订阅默认id声明的数据流，<code>declarer.shuffleGrouping(&quot;1&quot;)</code>可以订阅组件<code>&quot;1&quot;</code>的默认数据流</li>
+<li>Bolts中主要方法是execute，参数是一个数据元组tuple。Bolts使用一个OutputCollector对象发射处理后的数据元组tuple。为了让Storm知道什么时候接收到的数据元组（作为execute参数的）被处理完成，Bolts必须为每个收到的数据元组tuple调用OutputCollector对象的ack方法。这样这个tuple的信息源才会知道成功处理。</li>
+<li>一般流程：Blots处理一个输入的数据元组tuple（输入），处理结束后发射0个或多个tuple（结果），然后调用ack方法通知Storm已经处理过这个tuple（输入）了</li>
+</ol>
+<h5 id="参考阅读：-3"><a href="#参考阅读：-3" class="headerlink" title="参考阅读："></a><em>参考阅读：</em></h5><ol>
+<li><a target="_blank" rel="noopener" href="http://nathanmarz.github.com/storm/doc/backtype/storm/topology/IRichBolt.html">IRichBolt</a>：Bolts需要实现的接口</li>
+<li><a target="_blank" rel="noopener" href="http://nathanmarz.github.com/storm/doc/backtype/storm/topology/IBasicBolt.html">IBasicBolt</a>：这个方便的接口可以定义过滤操作或简单的功能</li>
+<li><a target="_blank" rel="noopener" href="http://nathanmarz.github.com/storm/doc/backtype/storm/task/OutputCollector.html">OutputCollector</a>：Bolts要发射数据元组到它们的输出信息流，用到这个类的一个实例</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/nathanmarz/storm/wiki/Guaranteeing-message-processing">如何保证信息不丢失</a></li>
+</ol>
+<h4 id="信息分发策略：Stream-groupings"><a href="#信息分发策略：Stream-groupings" class="headerlink" title="信息分发策略：Stream groupings"></a>信息分发策略：Stream groupings</h4><ol>
+<li>定义每个Blot应该接收怎样的输入流，是定义一个计算拓扑的一部分。一个信息分发策略定义了如何分配信息流到Blot的多个任务中</li>
+<li>Storm中有7个内建的信息分发策略：</li>
+</ol>
+<ul>
+<li>随机分组Shuffle Grouping：随机分发stream里面的tuple到bolt的任务中，保证每个bolt拿到相同数量的数据元组tuple</li>
+<li>按字段分组Fields Grouping：信息流通过特定字段进行分组。譬如数据流以<code>user-id</code>字段分成几组，数据流中带有相同<code>user-id</code>值的数据元组tuple<strong>都会</strong>去到Bolt中相同的任务，带有不同<code>user-id</code>值的两个数据元组tuple<strong>可能会</strong>被分配到不同的任务</li>
+<li>广播分发All Grouping：对于每一个数据元组，会分发到所有Bolt的所有任务。谨慎使用</li>
+<li>全局分发Global Grouping：整个数据流被分发到Bolt中的单个任务，这个任务是id最小的任务</li>
+<li>无分组None Grouping：这种分组方式是指信息流steam不关心谁会拿到它的信息元组。现时，无分组方式等价于随机分组方式。不同的地方在于，Storm会把这个bolt的执行，放到接收这个blot发射数据的信息源Spout或信息处理器Blot所在线程上。</li>
+<li>直行分组Direct Grouping：这是一种特殊的分组方式。使用这种方式进行分组的信息流，意味着数据元组tuple的生产者可以决定消费者的某个任务能接收到这个数据元组。只有被声明为Direct Stream的信息流可以声明这种分组方法，而且只能使用emitDirect方法发射。</li>
+<li>本地或随机分组Local or Shuffle Grouping：如果目标信息处理器Blot在同一个工作进程中有一个或多个任务，数据元组tuples会随机分发到这些进程内的任务中。否则，跟普通的随机分组一样</li>
+</ul>
+<h5 id="参考阅读：-4"><a href="#参考阅读：-4" class="headerlink" title="参考阅读："></a><em>参考阅读：</em></h5><ol>
+<li><a target="_blank" rel="noopener" href="http://nathanmarz.github.com/storm/doc/backtype/storm/topology/TopologyBuilder.html">TopologyBuilder</a>：使用这个类定义计算拓扑</li>
+<li><a target="_blank" rel="noopener" href="http://nathanmarz.github.com/storm/doc/backtype/storm/topology/InputDeclarer.html">InputDeclarer</a>：当TopologyBuilder中调用setBolt方法，InputDeclarer会被返回，而且返回的InputDeclarer用于定义Bolt的信息输入流和这些流该如何分发</li>
+<li><a target="_blank" rel="noopener" href="http://nathanmarz.github.com/storm/doc/backtype/storm/task/CoordinatedBolt.html">CoordinatedBolt</a>：这类处理器在分布式远程过程调用计算拓扑中很有用，而且重度使用直行信息流和直行分组</li>
+</ol>
+<h4 id="可靠性：Reliability"><a href="#可靠性：Reliability" class="headerlink" title="可靠性：Reliability"></a>可靠性：Reliability</h4><ol>
+<li>Storm保证每个数据元组tuple会被topology完整执行。</li>
+<li>Storm会追踪由每个Spout发出的tuple所产生的tuple树（一个bolt处理一个tuple之后可能会发射出别的tuple，从而可以形成树状结构），并且跟踪这棵tuple树什么时候成功处理完。</li>
+<li>每个计算拓扑会与一个信息超时关联。如果在超时时间内Storm没有监测到由一个Spout发出的tuple已经执行成功，那么Storm会主动结束tuple运算并且随后重新进行运算</li>
+<li>要使用Storm的可靠性特性，在发出一个新的tuple和完成处理一个tuple时必须通知Storm。Bolt使用OutputCollectior对象发射tuples，同时完成上述通知。通过它的emit方法来通知一个新的tuple产生了，通过它的ack方法通知一个tuple处理完成</li>
+</ol>
+<h5 id="参考阅读：-5"><a href="#参考阅读：-5" class="headerlink" title="参考阅读："></a><em>参考阅读：</em></h5><ol>
+<li><a target="_blank" rel="noopener" href="https://github.com/nathanmarz/storm/wiki/Guaranteeing-message-processing">如何保证信息不丢失</a></li>
+</ol>
+<h4 id="任务：Tasks"><a href="#任务：Tasks" class="headerlink" title="任务：Tasks"></a>任务：Tasks</h4><ol>
+<li>在集群中，每个Spout或Bolt会作为很多任务执行</li>
+<li>每个任务对应一个执行线程，通过信息分发策略定义怎样从一组任务中发送到另一组。</li>
+<li>可以使用TopologyBuilder中的setSpout与setBolt方法设置任务的并行度——也就是有多少个任务</li>
+</ol>
+<h4 id="工作进程：Workers"><a href="#工作进程：Workers" class="headerlink" title="工作进程：Workers"></a>工作进程：Workers</h4><ol>
+<li>一个计算拓扑可以经过一个或多个工作进程执行。每个工作进程是一个物理的Java虚拟机，执行这个计算拓扑的一部分。</li>
+<li>比如对于任务并行度是300的计算拓扑来说，如果我们使用50个工作进程来执行，那么每个工作进程会处理其中的6个任务（其实就是每个工作进程里面分配6个线程）。Storm会尽量均匀的工作分配给所有的工作进程。</li>
+</ol>
+<h5 id="参考阅读：-6"><a href="#参考阅读：-6" class="headerlink" title="参考阅读："></a><em>参考阅读：</em></h5><ol>
+<li><a target="_blank" rel="noopener" href="http://nathanmarz.github.com/storm/doc/backtype/storm/Config.html#TOPOLOGY_WORKERS">Config.TOPOLOGY_WORKERS</a>：配置计算拓扑分配到的工作进程数</li>
+</ol>
+<blockquote>
+<p>Written with <a target="_blank" rel="noopener" href="https://stackedit.io/">StackEdit</a>.</p>
+</blockquote>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/PROJECT/">PROJECT</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/STROM/">STROM</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2014/08/19/2014-08-19-use-d3-on-nodejs/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">在nodejs上用d3</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2014/01/22/2014-01-22-study-python/">
+                        <span class="hidden-mobile">笨办法学python笔记</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>
